@@ -14,5 +14,25 @@
         </SOURCES>
       </library>
     </orderEntry>
+    <orderEntry type="module-library">
+      <library name="PHP" type="php">
+        <CLASSES>
+          <root url="file://C:/wamp64/bin/php/php5.6.25" />
+        </CLASSES>
+        <SOURCES>
+          <root url="file://C:/wamp64/bin/php/php5.6.25" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="PHARS">
+        <CLASSES>
+          <root url="phar://C:/wamp64/bin/php/php5.6.25/pharcommand.phar/" />
+        </CLASSES>
+        <SOURCES>
+          <root url="phar://C:/wamp64/bin/php/php5.6.25/pharcommand.phar/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
   </component>
 </module>

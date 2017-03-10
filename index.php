@@ -5,3 +5,15 @@
  * Date: 09/03/2017
  * Time: 10:36
  */
+?>
+
+<html>
+<head></head>
+<body>
+    <h1>Index</h1><hr>
+    <?php
+     echo "Hello World!\n";
+     echo phpinfo();
+    ?>
+</body>
+</html>
