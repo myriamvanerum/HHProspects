@@ -11,6 +11,7 @@
 <head></head>
 <body>
     <h1>Index</h1><hr>
+    <p>Please work :)</p>
     <?php
      echo "Hello World!\n";
      echo phpinfo();
