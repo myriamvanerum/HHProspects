@@ -1,5 +1,10 @@
-# Internship
+# HH Prospects
 
 Internship at Halmstad University
 
-Setting up questionaires for incoming international students
+
+Setting up surveys for prospecting international students
+
+Managing surveys
+
+Data analysis
