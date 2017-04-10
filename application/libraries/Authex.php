@@ -118,7 +118,7 @@ class Authex {
 //        $CI->email->from('r0578968@thomasmore.be', 'Sven Swennen');
 //        $CI->email->to($emailadres);
 //        $CI->email->subject('Nieuw paswoord');
-//        $CI->email->message('Klik op deze link voor het aanpassen van je wachtwoord: ' . anchor(base_url() . 'index.php/Wachtwoord/reset_wachtwoord/' . $emailadres . '/' . $password, 'klik hier'));
+//        $CI->email->message('Klik op deze link voor het aanpassen van je wachtwoord: ' . anchor(base_url() . 'hhprospects.php/Wachtwoord/reset_wachtwoord/' . $emailadres . '/' . $password, 'klik hier'));
 //        $CI->email->send();
 //        echo $CI->email->print_debugger();
 //    }
