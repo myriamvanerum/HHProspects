@@ -16,7 +16,7 @@ class Home extends CI_Controller {
 //        $this->load->model('Paragraaf_model');
 //        $data['paragrafen'] = $this->Paragraaf_model->getAllHomepaginaParagrafen();
 
-        $this->LoadView('welcome_message', $data);
+        $this->LoadView('sbadmin', $data);
     }
 
     public function LoadView($viewnaam, $data) {
