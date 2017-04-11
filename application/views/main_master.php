@@ -15,6 +15,9 @@
 
         <!-- Bootstrap Core CSS -->
         <link href="<?php echo base_url(); ?>application/css/bootstrap.min.css" rel="stylesheet">
+        
+        <!-- Bootstrap Social CSS -->
+        <link href="<?php echo base_url(); ?>application/css/bootstrap-social.css" rel="stylesheet">
 
         <!-- MetisMenu CSS -->
         <link href="<?php echo base_url(); ?>application/css/metisMenu.min.css" rel="stylesheet">
