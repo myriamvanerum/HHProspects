@@ -50,7 +50,10 @@
 
         <div id="wrapper">
             {header}
-            {content}
+            <div id="content">
+                {content}
+            </div>
+            
             {footer}
         </div>
         <!-- /#wrapper -->

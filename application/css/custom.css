@@ -1,5 +1,14 @@
 .center-social {
     height: 50px;
-    padding-top: 10px;
-    padding-right: 5px;
+    padding: 10px;
+}
+
+#content {
+    margin-top: 30px;
+}
+
+@media (max-width: 980px) {
+  #content {
+    margin-top: 80px;
+    }
 }
