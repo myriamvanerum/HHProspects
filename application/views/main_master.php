@@ -13,6 +13,9 @@
 
         <link rel="shortcut icon" href="<?php echo base_url(); ?>application/css/favicon.ico">
 
+        <!-- Custom CSS -->
+        <link href="<?php echo base_url(); ?>application/css/custom.css" rel="stylesheet">
+        
         <!-- Bootstrap Core CSS -->
         <link href="<?php echo base_url(); ?>application/css/bootstrap.min.css" rel="stylesheet">
         
@@ -22,7 +25,7 @@
         <!-- MetisMenu CSS -->
         <link href="<?php echo base_url(); ?>application/css/metisMenu.min.css" rel="stylesheet">
 
-        <!-- Custom CSS -->
+        <!-- SBAdmin2 CSS -->
         <link href="<?php echo base_url(); ?>application/css/sb-admin-2.css" rel="stylesheet">
 
         <!-- Morris Charts CSS -->
