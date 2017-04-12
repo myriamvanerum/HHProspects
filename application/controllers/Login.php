@@ -41,18 +41,6 @@ class Login extends CI_Controller {
             $this->session->set_flashdata('error', 1);
 
             redirect('Login/login_screen');
-            
-//            $this->encryption->initialize(
-//                array(
-//                    'cipher' => 'aes-256',
-//                    'mode' => 'cbc',
-//                    'key' => $this->config->encryption_key
-//                )
-//            );
-//            
-//            echo $password;
-//            echo "\n" . $this->encryption->encrypt($password);
-//            echo "\n" . $this->encryption->decrypt($this->encryption->encrypt($password));
         }
     }
 

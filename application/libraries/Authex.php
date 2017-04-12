@@ -24,7 +24,7 @@ class Authex {
                 array(
                     'cipher' => 'aes-256',
                     'mode' => 'cbc',
-                    'key' => $this->config->encryption_key
+                    'key' => hex2bin('36ed175638a3c87faf371fb3e49fac287a23ee9ef0e441efd72d11217c2fe6cd')
                 )
             );
         
@@ -37,13 +37,6 @@ class Authex {
         {
             return false;
         }
-
-//        if ($user == null) {
-//            return false;
-//        } else {
-//            $CI->session->set_userdata('user_id', $user->id);
-//            return true;
-//        }
     }
 
     function loggedIn() {
