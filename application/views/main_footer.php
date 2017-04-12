@@ -1,6 +1,6 @@
-<nav class="navbar navbar-default navbar-static-bottom" role="navigation" style="margin-bottom: 0">
+<nav id="footer" class="navbar navbar-default navbar-fixed-bottom" role="navigation" style="margin-bottom: 0">
     <div class="navbar-header">
-        <a class="navbar-brand" href="<?php echo base_url() . "index.php/" . "Home";?>">Halmstad Hogskolan - Prospects</a>
+        <span class="navbar-text">Internship project &copy; Myriam Van Erum</span>
     </div>
     <!-- /.navbar-header -->
 

@@ -1,21 +1,14 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
+//***************************Myriam Van Erum********************************
+/**
+ * Page coded by Myriam Van Erum 
+ * Home page
+ */
 class Home extends CI_Controller {
 
-//	public function index()
-//	{
-//		$this->load->view('welcome_message');
-//	}
-
     public function index() {
-        $data['title'] = "Halmstad University Prospects";
-//        $data['navbarActive'] = "De Weide Wereld";
-//        $data['gebruiker'] = json_encode($this->authex->getUserInfo());
-//
-//        $this->load->model('Paragraaf_model');
-//        $data['paragrafen'] = $this->Paragraaf_model->getAllHomepaginaParagrafen();
-
+        $data['title'] = "HH Prospects";
         $this->LoadView('sbadmin', $data);
     }
 
@@ -27,6 +20,7 @@ class Home extends CI_Controller {
             'content' => $this->parser->parse($viewnaam, $data, true),
             'footer' => $this->parser->parse('main_footer', $data, true)
         );
+        
         $this->parser->parse('main_master', $partials);
     }
 }

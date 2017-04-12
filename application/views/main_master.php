@@ -45,7 +45,6 @@
             var site_url = '<?php echo site_url(); ?>';
         </script>
     </head>
-
     <body>
 
         <div id="wrapper">

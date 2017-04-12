@@ -7,7 +7,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="index.html">Halmstad Hogskolan - Prospects</a>
+        <?php echo anchor('Home/index', 'Halmstad Hogskolan - Prospects', 'class="navbar-brand"'); ?>
     </div>
     <!-- /.navbar-header -->
 
@@ -236,7 +236,10 @@
                     <!-- /input-group -->
                 </li>
                 <li>
-                    <a href="index.html"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                    <?php echo anchor('Home/index', 'Halmstad Hogskolan - Prospects'); ?>
+                </li>
+                <li>
+                    <?php echo anchor('Login/login_screen', 'Login'); ?>
                 </li>
                 <li>
                     <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Charts<span class="fa arrow"></span></a>
