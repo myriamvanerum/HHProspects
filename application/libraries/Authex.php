@@ -24,13 +24,13 @@ class Authex {
                 array(
                     'cipher' => 'aes-256',
                     'mode' => 'cbc',
-                    'key' => hex2bin('36ed175638a3c87faf371fb3e49fac287a23ee9ef0e441efd72d11217c2fe6cd')
+                    'key' => $this->config->encryption_key
                 )
             );
         
-        if ($CI->encryption->decrypt($user->user_password) == $password)
+        if ($CI->encryption->decrypt($user->password) == $password)
         {
-            $CI->session->set_userdata('user_id', $user->id);
+            $CI->session->set_userdata('id', $user->id);
             return true;
         }
         else
@@ -41,7 +41,7 @@ class Authex {
 
     function loggedIn() {
         $CI = & get_instance();
-        if ($CI->session->userdata('user_id')) {
+        if ($CI->session->userdata('id')) {
             return true;
         } else {
             return false;
@@ -53,7 +53,7 @@ class Authex {
         if (!$this->loggedIn()) {
             return null;
         } else {
-            $id = $CI->session->userdata('user_id');
+            $id = $CI->session->userdata('id');
             return $CI->Login_model->get($id);
         }
     }

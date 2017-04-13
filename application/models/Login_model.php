@@ -8,19 +8,19 @@ class Login_model extends CI_Model {
     }
 
     function get($id) {
-        $this->db->where('user_id', $id);
+        $this->db->where('id', $id);
         $query = $this->db->get('user');
         return $query->row();
     }
 
     function getAll() {
-        $this->db->order_by('user_first_name', 'asc');
+        $this->db->order_by('first_name', 'asc');
         $query = $this->db->get('user');
         return $query->result();
     }
 
     function getUser($email) {
-        $this->db->where('user_email', $email);
+        $this->db->where('email', $email);
         $query = $this->db->get('user');
         if ($query->num_rows() == 1) {
             return $query->row();
