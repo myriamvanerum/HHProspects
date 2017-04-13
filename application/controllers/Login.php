@@ -48,5 +48,29 @@ class Login extends CI_Controller {
         $this->authex->logout();
         redirect('Home');
     }
+    
+    public function reset_password() {
+        $data['title'] = 'Forgot your password? - HH Prospects';
+        $data['user'] = $this->authex->getUserInfo();
+        $data['error'] = $this->session->flashdata('error');
+        $this->LoadView('login/forgot_password', $data);
+    }
+    
+    public function send_email() {
+        $email = trim($this->input->get('email'));
+
+        $emailExists = $this->authex->control($email);
+
+        if ($emailExists) {
+            $data['title'] = 'E-mail verzonden';
+            $data['navbarActive'] = "Inloggen";
+            $data['email'] = $email;
+            $data['gebruiker'] = $this->authex->getUserInfo();
+            $this->LoadView('wachtwoord/verzonden', $data);
+        } else {
+            $this->session->set_flashdata('error', 1);
+            redirect('Login/reset_password');
+        }
+    }
 
 }

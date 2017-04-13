@@ -63,32 +63,25 @@ class Authex {
         $CI->session->sess_destroy();
     }
 
-    /**
-     * controleren of het email adres bestaat, zo ja dan een willekeurig password genereren voor de link die je aankrijgt via mail
-     */
-    function controle($emailadres) {
+    function control($email) {
         $CI = & get_instance();
 
-        if ($CI->Wachtwoord_model->email_bestaat($emailadres)) {
-            $password = sha1($emailadres);
-            $this->sendRecoverymail($emailadres, $password);
-            //$this->geefLinkWeer($emailadres, $password);
+        if ($CI->Login_model->email_exists($email)) {
+            $password = sha1($email);
+            $this->sendRecoveryMail($email, $password);
             return true;
         } else {
             return false;
         }
     }
 
-    /**
-     * mail versturen met een link erin die gaat naar de reset_wachtwoord functie
-     */
-    function sendRecoverymail($emailadres, $password) {
+    function sendRecoveryMail($email, $password) {
 
         $CI = & get_instance();
-        $CI->email->from('r0578968@thomasmore.be', 'Sven Swennen');
-        $CI->email->to($emailadres);
-        $CI->email->subject('Nieuw paswoord');
-        $CI->email->message('Klik op deze link voor het aanpassen van je wachtwoord: ' . anchor(base_url() . 'hhprospects.php/Wachtwoord/reset_wachtwoord/' . $emailadres . '/' . $password, 'klik hier'));
+        $CI->email->from('pp@hh.se', 'Halmstad Hogskolan - Prospects');
+        $CI->email->to($email);
+        $CI->email->subject('Reset your password');
+        $CI->email->message('Klik op deze link voor het aanpassen van je wachtwoord: ' . anchor(base_url() . 'hhprospects.php/Wachtwoord/reset_wachtwoord/' . $email . '/' . $password, 'klik hier'));
         $CI->email->send();
         echo $CI->email->print_debugger();
     }

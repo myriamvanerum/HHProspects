@@ -28,5 +28,16 @@ class Login_model extends CI_Model {
             return null;
         }
     }
+    
+    function email_exists($email){
+        
+        $this->db->where('email', $email);
+        $query = $this->db->get('user');
+        if ($query->num_rows() !== 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 }
