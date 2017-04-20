@@ -9,7 +9,7 @@ class Home extends CI_Controller {
 
     public function index() {
         $data['title'] = "HH Prospects";
-        $this->LoadView('sbadmin', $data);
+        $this->LoadView('home', $data);
     }
 
     public function LoadView($viewnaam, $data) {

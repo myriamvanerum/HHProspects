@@ -6,7 +6,7 @@
         </div>
     </div>
     <?php $attributes = array('name' => 'myform', 'method' => 'get');
-    echo form_open('Login/send_email', $attributes);
+    echo form_open('Login/check_email', $attributes);
     ?>
     <div class="row">
         <div class="col-lg-5 col-md-8">

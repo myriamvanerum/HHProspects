@@ -35,7 +35,7 @@ class Login_sysop extends CI_Controller {
         $email = $this->input->post('email');
         $password = $this->input->post('password');
 
-        if ($this->authex->login($email, $password)) {
+        if ($this->authex->loginSysop($email, $password)) {
             redirect('Home');
         } else {
             $this->session->set_flashdata('error', 1);

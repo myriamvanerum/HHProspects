@@ -35,5 +35,5 @@
     echo form_submit('loginSubmit', 'Login', "class='btn btn-primary'");
     echo form_close();
     ?>
-    <p class="extraPaddingTop"><?php echo anchor('Login/reset_password', 'Forgot your password?'); ?></p>
+    <p class="extraPaddingTop"><?php echo anchor('Login/forgot_password', 'Forgot your password?'); ?></p>
 </div>

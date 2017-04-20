@@ -38,6 +38,29 @@ class Authex {
             return false;
         }
     }
+    
+    function loginSysop($email, $password) {
+        $CI = & get_instance();
+        $user = $CI->User_model->getUserSysop($email);
+        
+        $CI->encryption->initialize(
+                array(
+                    'cipher' => 'aes-256',
+                    'mode' => 'cbc',
+                    'key' => $this->config->encryption_key
+                )
+            );
+        
+        if ($CI->encryption->decrypt($user->password) == $password)
+        {
+            $CI->session->set_userdata('id', $user->id);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 
     function loggedIn() {
         $CI = & get_instance();
@@ -67,24 +90,10 @@ class Authex {
         $CI = & get_instance();
 
         if ($CI->User_model->email_exists($email)) {
-            $password = sha1($email);
-            $this->sendRecoveryMail($email, $password);
             return true;
         } else {
             return false;
         }
-    }
-
-    function sendRecoveryMail($email, $password) {
-
-        $CI = & get_instance();
-        $CI->email->from('pp@hh.se', 'Halmstad Hogskolan - Prospects');
-        $CI->email->to($email);
-        $CI->email->subject('Reset your password');
-        $CI->email->message('Klik op deze link voor het aanpassen van je wachtwoord: ' . anchor(base_url() . 'index.php/Wachtwoord/reset_wachtwoord/' . $email . '/' . $password, 'klik hier'));
-        $CI->email->send();
-        echo $CI->email->print_debugger();
-        
     }
 
     /**
