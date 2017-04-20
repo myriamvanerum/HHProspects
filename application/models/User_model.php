@@ -43,12 +43,31 @@ class User_model extends CI_Model {
     
     function email_exists($email){
         $this->db->where('email', $email);
+        $this->db->where('level >', 1);
         $query = $this->db->get('user');
         if ($query->num_rows() !== 0) {
             return true;
         } else {
             return false;
         }
+    }
+    
+    function update_password($email, $password){
+        $user = $this->getUser($email);
+        
+        $this->load->library('encryption');
+        $this->encryption->initialize(
+                array(
+                    'cipher' => 'aes-256',
+                    'mode' => 'cbc',
+                    'key' => $this->config->encryption_key
+                )
+            );
+        $user->password = $this->encryption->encrypt($password);
+        
+        $this->db->where('email', $user->email);
+        $this->db->update('user', $user);
+        //return $this->db->update_id();
     }
 
 }

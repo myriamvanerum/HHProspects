@@ -27,6 +27,7 @@ class Login extends CI_Controller {
     public function login_screen() {
         $data['title'] = 'Login - HH Prospects';
         $data['error'] = json_encode($this->session->flashdata('error'));
+        $data['updated'] = json_encode($this->session->flashdata('updated'));
         $data['user'] = json_encode($this->authex->getUserInfo());
         $this->LoadView('login/login', $data);
     }
@@ -57,9 +58,9 @@ class Login extends CI_Controller {
     }
     
     public function check_email() {
-        $email = trim($this->input->get('email'));
+        $email = trim($this->input->post('email'));
 
-        $emailExists = $this->authex->control($email);
+        $emailExists = $this->User_model->email_exists($email);
 
         if ($emailExists) {
             $this->send_email($email);
@@ -78,15 +79,51 @@ class Login extends CI_Controller {
         $this->email->to($email);
         $this->email->subject('Reset your password');
         $data = array();
-        $data['url'] = base_url() . 'index.php/Login/reset_password/' . sha1($email);
+        
+        $this->load->library('encryption');
+        $data['url'] = base_url() . 'index.php/Login/reset_password/' . urlencode($email) . '/' . sha1($email);
+        
         $this->email->message($this->load->view('emails/reset_password_email', $data, TRUE));
         $this->email->set_mailtype("html");
         $this->email->send();
     }
     
-    public function reset_password($encr_email) {
-        echo $encr_email;
+    public function reset_password($email, $encr_email) {
+        $email = urldecode($email);
+        if (sha1($email) == $encr_email)
+        {
+            // OK, go ahead
+            $this->show_reset_page($email);
+        }
+        else
+        {
+            // Wrong url, go to 404
+            show_404();
+        }
         
+    }
+    
+    public function show_reset_page($email) {
+        $data['title'] = 'Reset your password - HH Prospects';
+        $data['email'] = $email;
+        $data['error'] = $this->session->flashdata('error');
+        $this->LoadView('login/reset_password', $data);
+    }
+    
+    public function change_password() {
+        $email = $this->input->post('email');
+        $password = $this->input->post('password');
+        $passwordControl = $this->input->post('passwordControl');
+
+        if ($password === $passwordControl) {
+            $this->User_model->update_password($email, $password);
+            $this->session->set_flashdata('updated', 1);
+            redirect('Login/login_screen');
+        } else {
+            $this->session->set_flashdata('error', 1);
+
+            redirect('Login/reset_password/' . urlencode($email) . '/' . sha1($email));
+        }
     }
 
 }

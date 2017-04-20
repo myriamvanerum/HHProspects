@@ -86,23 +86,4 @@ class Authex {
         $CI->session->sess_destroy();
     }
 
-    function control($email) {
-        $CI = & get_instance();
-
-        if ($CI->User_model->email_exists($email)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * nieuw wachtwoord aanmaken in de db voor een gebruiker met sha1 ter beveiliging
-     */
-    function update_wachtwoord($emailadres, $wachtwoord1) {
-        $CI = & get_instance();
-        $id = $CI->Wachtwoord_model->resetPassword($emailadres, $wachtwoord1);
-        //return $id;
-    }
-
 }

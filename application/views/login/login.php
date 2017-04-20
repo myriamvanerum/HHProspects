@@ -32,6 +32,18 @@
         </div>
         <?php
     }
+    if ($updated === 1) {
+        ?>
+        <div class="row">
+            <div class="col-lg-5 col-md-8">
+                <div class="alert alert-success alert-dismissable">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                    <strong>Success!</strong> Your password has been updated. You can now login here.
+                </div>
+            </div>
+        </div>
+        <?php
+    }
     echo form_submit('loginSubmit', 'Login', "class='btn btn-primary'");
     echo form_close();
     ?>

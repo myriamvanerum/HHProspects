@@ -5,7 +5,7 @@
             <p>Please fill in your password here. An e-mail will be sent to change your password.</p>
         </div>
     </div>
-    <?php $attributes = array('name' => 'myform', 'method' => 'get');
+    <?php $attributes = array('name' => 'myform', 'method' => 'post');
     echo form_open('Login/check_email', $attributes);
     ?>
     <div class="row">
