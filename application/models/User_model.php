@@ -69,5 +69,20 @@ class User_model extends CI_Model {
         $this->db->update('user', $user);
         //return $this->db->update_id();
     }
+    
+    function logFailedLoginAttempt($login_attempt) {
+        $this->db->insert('login_attempt', $login_attempt);
+    }
+    
+    function deleteOldLoginAttempts($time) {
+        $this->db->where('timestamp <', $time);
+        $this->db->delete('login_attempt');
+    }
+    
+    function countLoginAttempts($user_id) {
+        $this->db->where('user_id', $user_id);
+        $this->db->from('login_attempt');
+        return $this->db->count_all_results();
+    }
 
 }

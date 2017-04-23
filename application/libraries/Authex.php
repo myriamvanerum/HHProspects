@@ -2,6 +2,7 @@
 
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
+
 /**
  * Page coded by Myriam Van Erum
  * Authex library
@@ -19,47 +20,109 @@ class Authex {
     function login($email, $password) {
         $CI = & get_instance();
         $user = $CI->User_model->getUser($email);
-        
+
         $CI->encryption->initialize(
                 array(
                     'cipher' => 'aes-256',
                     'mode' => 'cbc',
                     'key' => $this->config->encryption_key
                 )
-            );
-        
-        if ($CI->encryption->decrypt($user->password) == $password)
-        {
+        );
+
+        if ($CI->encryption->decrypt($user->password) == $password) {
             $CI->session->set_userdata('id', $user->id);
             return true;
+        } else {
+            return false;
         }
-        else
-        {
+    }
+
+    function loginSysop($email, $password) {
+        $CI = & get_instance();
+
+        // delete all failed login attempts older than half an hour
+        $this->deleteOldLoginAttempts();
+
+        $user = $CI->User_model->getUserSysop($email);
+
+        $CI->encryption->initialize(
+                array(
+                    'cipher' => 'aes-256',
+                    'mode' => 'cbc',
+                    'key' => $this->config->encryption_key
+                )
+        );
+
+        // Check if there are 3 or more login_attempts in the database, if so, don't check login, show error message
+        $loginCount = $CI->User_model->countLoginAttempts($user->id);
+
+        if ($loginCount < 3) {
+
+            if ($CI->encryption->decrypt($user->password) == $password) {
+                $CI->session->set_userdata('id', $user->id);
+                return true;
+            } else {
+                $login_attempt = new stdClass();
+                $login_attempt->user_id = $user->id;
+                $login_attempt->timestamp = date('Y-m-d H:i:s');
+
+                $CI->User_model->logFailedLoginAttempt($login_attempt);
+                
+                // Is this the third failed attempt?
+                $loginCount++;
+                
+                if ($loginCount === 3)
+                {
+                    $this->sendEmailTooManyAttempts($user->email, $login_attempt->timestamp);
+                }
+
+                return false;
+            }
+        } else {
             return false;
         }
     }
     
-    function loginSysop($email, $password) {
+    public function sendEmailTooManyAttempts($user_email, $timestamp) {
+//        $CI = & get_instance();
+//        
+//        $adminEmail = "myriamvanerum@hotmail.com";
+//        $CI->email->from('prospects@hh.se', 'Halmstad University Prospects');
+//        $CI->email->to($adminEmail);
+//        $CI->email->subject('Failed SYSOP Login Attempts');
+//        $data = array();
+//        
+//        $data['user_email'] = $user_email;
+//        $data['timestamp'] = $timestamp;
+//        $data['ip'] = $_SERVER['REMOTE_ADDR'];
+//        
+//        $CI->email->message($this->load->view('emails/sysop_login_attempts_email', $data, TRUE));
+//        $CI->email->set_mailtype("html");
+//        $CI->email->send();
+        
         $CI = & get_instance();
-        $user = $CI->User_model->getUserSysop($email);
         
-        $CI->encryption->initialize(
-                array(
-                    'cipher' => 'aes-256',
-                    'mode' => 'cbc',
-                    'key' => $this->config->encryption_key
-                )
-            );
+        $CI->email->from('prospects@hh.se', 'Halmstad University Prospects');
+        $adminEmail = "myriamvanerum@hotmail.com";
+        $CI->email->to($adminEmail);
+        $CI->email->subject('Failed SYSOP Login Attempts');
         
-        if ($CI->encryption->decrypt($user->password) == $password)
-        {
-            $CI->session->set_userdata('id', $user->id);
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        $data = array();
+        $data['user_email'] = $user_email;
+        $data['timestamp'] = $timestamp;
+        $data['ip'] = $_SERVER['REMOTE_ADDR'];
+        $data['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
+        
+        $CI->email->message($CI->load->view('emails/sysop_login_attempts_email', $data, TRUE));
+        $CI->email->set_mailtype("html");
+        $CI->email->send();
+    }
+
+    function deleteOldLoginAttempts() {
+        $CI = & get_instance();
+
+        $time = date('Y-m-d H:i:s', time() - 30 * 60);
+        $CI->User_model->deleteOldLoginAttempts($time);
     }
 
     function loggedIn() {

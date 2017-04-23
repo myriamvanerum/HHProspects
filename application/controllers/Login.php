@@ -80,7 +80,6 @@ class Login extends CI_Controller {
         $this->email->subject('Reset your password');
         $data = array();
         
-        $this->load->library('encryption');
         $data['url'] = base_url() . 'index.php/Login/reset_password/' . urlencode($email) . '/' . sha1($email);
         
         $this->email->message($this->load->view('emails/reset_password_email', $data, TRUE));
@@ -121,7 +120,6 @@ class Login extends CI_Controller {
             redirect('Login/login_screen');
         } else {
             $this->session->set_flashdata('error', 1);
-
             redirect('Login/reset_password/' . urlencode($email) . '/' . sha1($email));
         }
     }
