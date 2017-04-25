@@ -8,7 +8,7 @@
     <?php $attributes = array('name' => 'myform', 'method' => 'post');
     echo form_open('Login/change_password', $attributes);
     ?>
-    <input class="form-control hidden" type="text" id="email" name="email" value="<?php echo $email;?>">
+    <input class="form-control hidden" type="text" id="email" name="email" value="<?php echo $email;?>" readonly>
     <div class="row">
         <div class="col-lg-5 col-md-8">
             <p><input class="form-control" type="password" id="password" name="password" required="" placeholder="Password"></p>

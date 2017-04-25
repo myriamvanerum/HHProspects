@@ -55,6 +55,7 @@
                     <!-- /input-group -->
                 </li>
                 <li><?php echo anchor('Login_sysop/login_screen', 'SYSOP Login'); ?></li>
+                <li><?php echo anchor('Login_student/login_screen', 'Student Login'); ?></li>
                 <li>
                     <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Charts<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">

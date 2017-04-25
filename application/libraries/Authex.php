@@ -13,7 +13,7 @@ class Authex {
     public function __construct() {
         $CI = & get_instance();
         $CI->load->model('User_model');
-        $CI->load->helper('string');
+        $CI->load->model('Student_model');
         $CI->load->library('encryption');
     }
 
@@ -25,7 +25,7 @@ class Authex {
                 array(
                     'cipher' => 'aes-256',
                     'mode' => 'cbc',
-                    'key' => $this->config->encryption_key
+                    'key' => hex2bin('36ed175638a3c87faf371fb3e49fac287a23ee9ef0e441efd72d11217c2fe6cd')
                 )
         );
 
@@ -49,11 +49,11 @@ class Authex {
                 array(
                     'cipher' => 'aes-256',
                     'mode' => 'cbc',
-                    'key' => $this->config->encryption_key
+                    'key' => hex2bin('36ed175638a3c87faf371fb3e49fac287a23ee9ef0e441efd72d11217c2fe6cd')
                 )
         );
 
-        // Check if there are 3 or more login_attempts in the database, if so, don't check login, show error message
+        // Check if there are 3 or more failed login_attempts in the database, if so, don't check login, show error message
         $loginCount = $CI->User_model->countLoginAttempts($user->id);
 
         if ($loginCount < 3) {
@@ -84,22 +84,6 @@ class Authex {
     }
     
     public function sendEmailTooManyAttempts($user_email, $timestamp) {
-//        $CI = & get_instance();
-//        
-//        $adminEmail = "myriamvanerum@hotmail.com";
-//        $CI->email->from('prospects@hh.se', 'Halmstad University Prospects');
-//        $CI->email->to($adminEmail);
-//        $CI->email->subject('Failed SYSOP Login Attempts');
-//        $data = array();
-//        
-//        $data['user_email'] = $user_email;
-//        $data['timestamp'] = $timestamp;
-//        $data['ip'] = $_SERVER['REMOTE_ADDR'];
-//        
-//        $CI->email->message($this->load->view('emails/sysop_login_attempts_email', $data, TRUE));
-//        $CI->email->set_mailtype("html");
-//        $CI->email->send();
-        
         $CI = & get_instance();
         
         $CI->email->from('prospects@hh.se', 'Halmstad University Prospects');
@@ -123,6 +107,26 @@ class Authex {
 
         $time = date('Y-m-d H:i:s', time() - 30 * 60);
         $CI->User_model->deleteOldLoginAttempts($time);
+    }
+    
+    function loginStudent($email, $password) {
+        $CI = & get_instance();
+        $student = $CI->Student_model->getStudentByEmail($email);
+
+        $CI->encryption->initialize(
+                array(
+                    'cipher' => 'aes-256',
+                    'mode' => 'cbc',
+                    'key' => hex2bin('36ed175638a3c87faf371fb3e49fac287a23ee9ef0e441efd72d11217c2fe6cd')
+                )
+        );
+
+        if ($CI->encryption->decrypt($student->password) == $password) {
+            $CI->session->set_userdata('student_id', $student->id);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     function loggedIn() {
