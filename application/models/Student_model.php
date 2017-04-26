@@ -55,5 +55,28 @@ class Student_model extends CI_Model {
         $this->db->where('email', $student->email);
         $this->db->update('student', $student);
     }
-
+    
+    function deleteOldLoginAttempts($time) {
+        $this->db->where('timestamp <', $time);
+        $this->db->delete('student_login_attempt');
+    }
+    
+    function deleteLoginAttemptsOneStudent($id) {
+        $this->db->where('student_id', $id);
+        $this->db->delete('student_login_attempt');
+    }
+    
+    function countLoginAttempts($student_id) {
+        $this->db->where('student_id', $student_id);
+        $this->db->from('student_login_attempt');
+        return $this->db->count_all_results();
+    }
+    
+    function logFailedLoginAttempt($login_attempt) {
+        $this->db->insert('student_login_attempt', $login_attempt);
+    }
+    
+    function logPasswordReset($login_attempt) {
+        $this->db->insert('student_failed_login_log', $login_attempt);
+    }
 }

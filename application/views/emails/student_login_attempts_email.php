@@ -67,18 +67,15 @@
                   <tr>
                     <td class="inner contents center" style="padding-top:15px;padding-bottom:15px;padding-right:30px;padding-left:30px;text-align:left;">
                       <center>
-                        <p class="h1 center" style="Margin:0;text-align:center;font-family:'flama-condensed','Arial Narrow',Arial;font-weight:100;font-size:30px;Margin-bottom:26px;">Failed SYSOP Login Attempts</p>
+                        <p class="h1 center" style="Margin:0;text-align:center;font-family:'flama-condensed','Arial Narrow',Arial;font-weight:100;font-size:30px;Margin-bottom:26px;">Failed Login Attempts</p>
                         <!--[if (gte mso 9)|(IE)]><![endif]-->
 
                         <div class="description center" style="font-family:'Muli','Arial Narrow',Arial;Margin:0;text-align:center;max-width:320px;color:#a1a8ad;line-height:24px;font-size:15px;Margin-bottom:10px;margin-left: auto; margin-right: auto;">
                             <div style="color: rgb(161, 168, 173); background-color: rgb(255, 255, 255);">
-                                <p>Security alert!</p>
-                                <p>Someone has tried too many times to log in to a SYSOP account on the Halmstad University Prospects website.</p>
-                                <p>The following data were collected:</p>
-                                <p>E-mail address of attempted login - <?php echo $user_email;?></p>
-                                <p>Timestamp - <?php echo $timestamp;?></p>
-                                <p>IP address - <?php echo $ip;?></p>
-                                <p>Browser information - <?php echo $user_agent;?></p>
+                                <p>Hi <?php echo $student_name;?>!</p>
+                                <p>You tried too many times to log in to your account on the Halmstad University Prospects website.</p>
+                                <p>You have been given a new password: <b><?php echo $new_password;?></b></p>
+                                <p>Please try to log in again using this password, and contact our support staff if the issue persists.</p>
                             </div>
                         </div>
                         <!--[if (gte mso 9)|(IE)]><br>&nbsp;<![endif]-->

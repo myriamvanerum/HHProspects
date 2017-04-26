@@ -6,7 +6,7 @@ if (!defined('BASEPATH'))
 //***************************Myriam Van Erum********************************
 /**
  * Page coded by Myriam Van Erum 
- * Login page for sysop
+ * Login page for student
  */
 class Login_student extends CI_Controller {
 
@@ -17,7 +17,7 @@ class Login_student extends CI_Controller {
     public function LoadView($viewnaam, $data) {
         $partials = array(
             'title' => $data['title'],
-            'header' => $this->parser->parse('main_header', $data, true),
+            'header' => $this->parser->parse('student_header', $data, true),
             'content' => $this->parser->parse($viewnaam, $data, true),
             'footer' => $this->parser->parse('main_footer', $data, true)
         );
