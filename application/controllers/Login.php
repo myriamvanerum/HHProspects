@@ -12,6 +12,7 @@ class Login extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
+        $this->load->model('User_model');
     }
 
     public function LoadView($viewnaam, $data) {
@@ -37,6 +38,13 @@ class Login extends CI_Controller {
         $password = $this->input->post('password');
 
         if ($this->authex->login($email, $password)) {
+            $user = $this->User_model->getUser($email);
+            
+            if ($user->level == 2)
+            {
+                redirect('Admin');
+            }
+            
             redirect('Home');
         } else {
             $this->session->set_flashdata('error', 1);
