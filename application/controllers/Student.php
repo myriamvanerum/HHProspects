@@ -5,7 +5,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * Page coded by Myriam Van Erum 
  * Home page
  */
-class Home extends CI_Controller {
+class Student extends CI_Controller {
 
     public function index() {
         $data['title'] = "HH Prospects";

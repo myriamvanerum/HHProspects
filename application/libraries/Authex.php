@@ -2,6 +2,7 @@
 
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
+
 /**
  * Page coded by Myriam Van Erum
  * Authex library
@@ -11,32 +12,234 @@ class Authex {
 
     public function __construct() {
         $CI = & get_instance();
-        $CI->load->model('Login_model');
-        $CI->load->helper('string');
+        $CI->load->model('User_model');
+        $CI->load->model('Student_model');
         $CI->load->library('encryption');
     }
 
     function login($email, $password) {
         $CI = & get_instance();
-        $user = $CI->Login_model->getUser($email);
-        
+        $user = $CI->User_model->getUser($email);
+
         $CI->encryption->initialize(
                 array(
                     'cipher' => 'aes-256',
                     'mode' => 'cbc',
-                    'key' => $this->config->encryption_key
+                    'key' => hex2bin('36ed175638a3c87faf371fb3e49fac287a23ee9ef0e441efd72d11217c2fe6cd')
                 )
-            );
-        
-        if ($CI->encryption->decrypt($user->password) == $password)
-        {
+        );
+
+        if ($CI->encryption->decrypt($user->password) == $password) {
             $CI->session->set_userdata('id', $user->id);
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
+    }
+
+    function loginSysop($email, $password) {
+        $CI = & get_instance();
+
+        // delete all failed login attempts older than half an hour
+        $this->deleteOldLoginAttempts();
+
+        $user = $CI->User_model->getUserSysop($email);
+
+        if ($user != null) {
+
+            $CI->encryption->initialize(
+                    array(
+                        'cipher' => 'aes-256',
+                        'mode' => 'cbc',
+                        'key' => hex2bin('36ed175638a3c87faf371fb3e49fac287a23ee9ef0e441efd72d11217c2fe6cd')
+                    )
+            );
+
+            // Check if there are 3 or more failed login_attempts in the database, if so, don't check login, show error message
+            $loginCount = $CI->User_model->countLoginAttempts($user->id);
+
+            if ($loginCount < 3) {
+
+                if ($CI->encryption->decrypt($user->password) == $password) {
+                    $CI->session->set_userdata('id', $user->id);
+                    return true;
+                } else {
+                    $login_attempt = new stdClass();
+                    $login_attempt->user_id = $user->id;
+                    $login_attempt->timestamp = date('Y-m-d H:i:s');
+
+                    $CI->User_model->logFailedLoginAttempt($login_attempt);
+
+                    // Is this the third failed attempt?
+                    $loginCount++;
+
+                    if ($loginCount === 3) {
+                        $this->sendEmailTooManyAttempts($user->email, $login_attempt->timestamp);
+                    }
+
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    public function sendEmailTooManyAttempts($user_email, $timestamp) {
+        $CI = & get_instance();
+
+        $CI->email->from('prospects@hh.se', 'Halmstad University Prospects');
+        $adminEmail = "myriamvanerum@hotmail.com";
+        $CI->email->to($adminEmail);
+        $CI->email->subject('Failed SYSOP Login Attempts');
+
+        $data = array();
+        $data['user_email'] = $user_email;
+        $data['timestamp'] = $timestamp;
+        $data['ip'] = $_SERVER['REMOTE_ADDR'];
+        $data['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
+
+        $CI->email->message($CI->load->view('emails/sysop_login_attempts_email', $data, TRUE));
+        $CI->email->set_mailtype("html");
+        $CI->email->send();
+    }
+
+    function deleteOldLoginAttempts() {
+        $CI = & get_instance();
+
+        $time = date('Y-m-d H:i:s', time() - 30 * 60);
+        $CI->User_model->deleteOldLoginAttempts($time);
+    }
+
+    function loginStudent($email, $password) {
+        $CI = & get_instance();
+
+        // delete all failed login attempts older than half an hour
+        $this->deleteOldStudentLoginAttempts();
+
+        $student = $CI->Student_model->getStudentByEmail($email);
+
+        if ($student != null) {
+
+            $CI->encryption->initialize(
+                    array(
+                        'cipher' => 'aes-256',
+                        'mode' => 'cbc',
+                        'key' => hex2bin('36ed175638a3c87faf371fb3e49fac287a23ee9ef0e441efd72d11217c2fe6cd')
+                    )
+            );
+
+            // Check if there are 3 or more failed student_login_attempts in the database, if so, don't check login, show error message
+            $loginCount = $CI->Student_model->countLoginAttempts($student->id);
+
+            if ($loginCount < 3) {
+
+                if ($CI->encryption->decrypt($student->password) == $password) {
+                    $CI->session->set_userdata('student_id', $student->id);
+                    return true;
+                } else {
+                    $login_attempt = new stdClass();
+                    $login_attempt->student_id = $student->id;
+                    $login_attempt->timestamp = date('Y-m-d H:i:s');
+
+                    $CI->Student_model->logFailedLoginAttempt($login_attempt);
+
+                    // Is this the third failed attempt?
+                    $loginCount++;
+
+                    if ($loginCount === 3) {
+                        $new_password = $this->generatePasswordStudent($student);
+                        $CI->Student_model->deleteLoginAttemptsOneStudent($student->id);
+                        $this->sendEmailTooManyAttemptsStudent($student, $new_password);
+                        $this->sendEmailTooManyAttemptsAdmin($student, $login_attempt->timestamp);
+                        $this->addToLog($student, $login_attempt->timestamp);
+                    }
+
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    function generatePasswordStudent($student) {
+        $CI = & get_instance();
+
+        $password = $this->randomPassword();
+
+        $CI->Student_model->update_password($student->email, $password);
+
+        return $password;
+    }
+
+    function randomPassword() {
+        $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#%^*?';
+        $password = array();
+        $alpha_length = strlen($alphabet) - 1;
+        for ($i = 0; $i < 12; $i++) {
+            $n = rand(0, $alpha_length);
+            $password[] = $alphabet[$n];
+        }
+        return implode($password);
+    }
+
+    function deleteOldStudentLoginAttempts() {
+        $CI = & get_instance();
+
+        $time = date('Y-m-d H:i:s', time() - 30 * 60);
+        $CI->Student_model->deleteOldLoginAttempts($time);
+    }
+
+    function addToLog($student, $timestamp) {
+        $CI = & get_instance();
+
+        $student_failed_login_log = new stdClass();
+        $student_failed_login_log->student_id = $student->id;
+        $student_failed_login_log->timestamp = $timestamp;
+        $student_failed_login_log->password_sent = TRUE;
+
+        $CI->Student_model->logPasswordReset($student_failed_login_log);
+    }
+
+    public function sendEmailTooManyAttemptsStudent($student, $new_password) {
+        $CI = & get_instance();
+
+        $CI->email->from('prospects@hh.se', 'Halmstad University Prospects');
+        $CI->email->to($student->email);
+        $CI->email->subject('HH Prospects Failed Login');
+
+        $data = array();
+        $data['student_name'] = $student->first_name . " " . $student->last_name;
+        $data['new_password'] = $new_password;
+
+        $CI->email->message($CI->load->view('emails/student_login_attempts_email', $data, TRUE));
+        $CI->email->set_mailtype("html");
+        $CI->email->send();
+    }
+
+    public function sendEmailTooManyAttemptsAdmin($student, $timestamp) {
+        $CI = & get_instance();
+
+        $admin = $CI->User_model->get($student->admin_id);
+
+        $CI->email->from('prospects@hh.se', 'Halmstad University Prospects');
+        $CI->email->to($admin->email);
+        $CI->email->subject('HH Prospects Failed Login By Student');
+
+        $data = array();
+        $data['admin_name'] = $admin->first_name . " " . $admin->last_name;
+        $data['student_name'] = $student->first_name . " " . $student->last_name;
+        $data['student_email'] = $student->email;
+        $data['timestamp'] = $timestamp;
+
+        $CI->email->message($CI->load->view('emails/admin_login_attempts_email', $data, TRUE));
+        $CI->email->set_mailtype("html");
+        $CI->email->send();
     }
 
     function loggedIn() {
@@ -54,52 +257,32 @@ class Authex {
             return null;
         } else {
             $id = $CI->session->userdata('id');
-            return $CI->Login_model->get($id);
+            return $CI->User_model->get($id);
         }
     }
 
-    function logout() {
+    function loggedInStudent() {
         $CI = & get_instance();
-        $CI->session->sess_destroy();
-    }
-
-    /**
-     * controleren of het email adres bestaat, zo ja dan een willekeurig password genereren voor de link die je aankrijgt via mail
-     */
-    function controle($emailadres) {
-        $CI = & get_instance();
-
-        if ($CI->Wachtwoord_model->email_bestaat($emailadres)) {
-            $password = sha1($emailadres);
-            $this->sendRecoverymail($emailadres, $password);
-            //$this->geefLinkWeer($emailadres, $password);
+        if ($CI->session->userdata('student_id')) {
             return true;
         } else {
             return false;
         }
     }
 
-    /**
-     * mail versturen met een link erin die gaat naar de reset_wachtwoord functie
-     */
-    function sendRecoverymail($emailadres, $password) {
-
+    function getStudentInfo() {
         $CI = & get_instance();
-        $CI->email->from('r0578968@thomasmore.be', 'Sven Swennen');
-        $CI->email->to($emailadres);
-        $CI->email->subject('Nieuw paswoord');
-        $CI->email->message('Klik op deze link voor het aanpassen van je wachtwoord: ' . anchor(base_url() . 'hhprospects.php/Wachtwoord/reset_wachtwoord/' . $emailadres . '/' . $password, 'klik hier'));
-        $CI->email->send();
-        echo $CI->email->print_debugger();
+        if (!$this->loggedInStudent()) {
+            return null;
+        } else {
+            $id = $CI->session->userdata('student_id');
+            return $CI->Student_model->get($id);
+        }
     }
 
-    /**
-     * nieuw wachtwoord aanmaken in de db voor een gebruiker met sha1 ter beveiliging
-     */
-    function update_wachtwoord($emailadres, $wachtwoord1) {
+    function logout() {
         $CI = & get_instance();
-        $id = $CI->Wachtwoord_model->resetPassword($emailadres, $wachtwoord1);
-        //return $id;
+        $CI->session->sess_destroy();
     }
 
 }
