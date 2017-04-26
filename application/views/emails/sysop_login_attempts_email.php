@@ -72,13 +72,13 @@
 
                         <div class="description center" style="font-family:'Muli','Arial Narrow',Arial;Margin:0;text-align:center;max-width:320px;color:#a1a8ad;line-height:24px;font-size:15px;Margin-bottom:10px;margin-left: auto; margin-right: auto;">
                             <div style="color: rgb(161, 168, 173); background-color: rgb(255, 255, 255);">
-                                <p>Security alert!</p>
-                                <p>Someone has tried too many times to log in to a SYSOP account on the Halmstad University Prospects website.</p>
-                                <p>The following data were collected:</p>
-                                <p>E-mail address of attempted login - <?php echo $user_email;?></p>
-                                <p>Timestamp - <?php echo $timestamp;?></p>
-                                <p>IP address - <?php echo $ip;?></p>
-                                <p>Browser information - <?php echo $user_agent;?></p>
+                                Security alert!<br>
+                                Someone has tried too many times to log in to a SYSOP account on the Halmstad University Prospects website.<br>
+                                The following data were collected:<br>
+                                E-mail address of attempted login - <?php echo $user_email;?><br>
+                                Timestamp - <?php echo $timestamp;?><br>
+                                IP address - <?php echo $ip;?><br>
+                                Browser information - <?php echo $user_agent;?>
                             </div>
                         </div>
                         <!--[if (gte mso 9)|(IE)]><br>&nbsp;<![endif]-->

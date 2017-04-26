@@ -72,9 +72,9 @@
 
                         <div class="description center" style="font-family:'Muli','Arial Narrow',Arial;Margin:0;text-align:center;max-width:320px;color:#a1a8ad;line-height:24px;font-size:15px;Margin-bottom:10px;margin-left: auto; margin-right: auto;">
                             <div style="color: rgb(161, 168, 173); background-color: rgb(255, 255, 255);">
-                                <p>Dear <?php echo $admin_name;?>!</p>
-                                <p>A student, <?php echo $student_name;?> (<?php echo $student_email;?>), tried too many times to log in to his/her account on the Halmstad University Prospects website. This happened at <?php echo $timestamp;?></p>
-                                <p>The student has received a new password via e-mail. A note has been made in the history log of this event.</p>
+                                Dear <?php echo $admin_name;?>!<br>
+                                A student, <?php echo $student_name;?> (<?php echo $student_email;?>), tried too many times to log in to his/her account on the Halmstad University Prospects website. This happened at <?php echo $timestamp;?><br>
+                                The student has received a new password via e-mail. A note has been made in the history log of this event.
                             </div>
                         </div>
                         <!--[if (gte mso 9)|(IE)]><br>&nbsp;<![endif]-->

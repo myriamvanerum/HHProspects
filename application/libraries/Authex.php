@@ -256,7 +256,7 @@ class Authex {
     
     function loggedInStudent() {
         $CI = & get_instance();
-        if ($CI->session->userdata('id')) {
+        if ($CI->session->userdata('student_id')) {
             return true;
         } else {
             return false;

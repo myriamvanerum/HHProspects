@@ -72,10 +72,10 @@
 
                         <div class="description center" style="font-family:'Muli','Arial Narrow',Arial;Margin:0;text-align:center;max-width:320px;color:#a1a8ad;line-height:24px;font-size:15px;Margin-bottom:10px;margin-left: auto; margin-right: auto;">
                             <div style="color: rgb(161, 168, 173); background-color: rgb(255, 255, 255);">
-                                <p>Hi <?php echo $student_name;?>!</p>
-                                <p>You tried too many times to log in to your account on the Halmstad University Prospects website.</p>
-                                <p>You have been given a new password: <b><?php echo $new_password;?></b></p>
-                                <p>Please try to log in again using this password, and contact our support staff if the issue persists.</p>
+                                Hi <?php echo $student_name;?>!<br>
+                                You tried too many times to log in to your account on the Halmstad University Prospects website.<br>
+                                You have been given a new password: <b><?php echo $new_password;?></b><br>
+                                Please try to log in again using this password, and contact our support staff if the issue persists.
                             </div>
                         </div>
                         <!--[if (gte mso 9)|(IE)]><br>&nbsp;<![endif]-->
