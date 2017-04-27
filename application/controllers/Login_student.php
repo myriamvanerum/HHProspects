@@ -24,7 +24,9 @@ class Login_student extends CI_Controller {
         $this->parser->parse('main_master', $partials);
     }
 
-    public function login_screen() {
+    public function index() {
+        $this->user_control->notLoggedIn();
+        
         $data['title'] = 'Student Login - HH Prospects';
         $data['error'] = json_encode($this->session->flashdata('error'));
         $data['student'] = json_encode($this->authex->getUserInfo());
@@ -36,11 +38,11 @@ class Login_student extends CI_Controller {
         $password = $this->input->post('password');
 
         if ($this->authex->loginStudent($email, $password)) {
-            redirect('Home');
+            redirect('Student');
         } else {
             $this->session->set_flashdata('error', 1);
 
-            redirect('Login_student/login_screen');
+            redirect('Login_student/index');
         }
     }
 

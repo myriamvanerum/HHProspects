@@ -90,7 +90,7 @@ class Authex {
     public function sendEmailTooManyAttempts($user_email, $timestamp) {
         $CI = & get_instance();
 
-        $CI->email->from('prospects@hh.se', 'Halmstad University Prospects');
+        $CI->email->from('noreply@hh.se', 'Halmstad University Prospects');
         $adminEmail = "myriamvanerum@hotmail.com";
         $CI->email->to($adminEmail);
         $CI->email->subject('Failed SYSOP Login Attempts');
@@ -209,7 +209,7 @@ class Authex {
     public function sendEmailTooManyAttemptsStudent($student, $new_password) {
         $CI = & get_instance();
 
-        $CI->email->from('prospects@hh.se', 'Halmstad University Prospects');
+        $CI->email->from('noreply@hh.se', 'Halmstad University Prospects');
         $CI->email->to($student->email);
         $CI->email->subject('HH Prospects Failed Login');
 
@@ -227,7 +227,7 @@ class Authex {
 
         $admin = $CI->User_model->get($student->admin_id);
 
-        $CI->email->from('prospects@hh.se', 'Halmstad University Prospects');
+        $CI->email->from('noreply@hh.se', 'Halmstad University Prospects');
         $CI->email->to($admin->email);
         $CI->email->subject('HH Prospects Failed Login By Student');
 

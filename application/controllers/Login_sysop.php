@@ -24,7 +24,9 @@ class Login_sysop extends CI_Controller {
         $this->parser->parse('main_master', $partials);
     }
 
-    public function login_screen() {
+    public function index() {
+        $this->user_control->notLoggedIn();
+        
         $data['title'] = 'SYSOP Login - HH Prospects';
         $data['error'] = json_encode($this->session->flashdata('error'));
         $data['user'] = json_encode($this->authex->getUserInfo());
@@ -36,11 +38,11 @@ class Login_sysop extends CI_Controller {
         $password = $this->input->post('password');
 
         if ($this->authex->loginSysop($email, $password)) {
-            redirect('Home');
+            redirect('Sysop');
         } else {
             $this->session->set_flashdata('error', 1);
 
-            redirect('Login_sysop/login_screen');
+            redirect('Login_sysop/index');
         }
     }
 

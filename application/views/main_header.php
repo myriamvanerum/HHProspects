@@ -46,8 +46,6 @@ $student = $this->authex->getStudentInfo();
                     <i class="fa fa-user fa-fw"></i> <?php echo $user->first_name . " " . $user->last_name; ?> <i class="fa fa-caret-down"></i>
                 </a>
                 <ul class="dropdown-menu dropdown-user">
-                    <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a></li>
-                    <li class="divider"></li>
                     <li><?php echo anchor('Login/logout', '<i class="fa fa-sign-out fa-fw"></i> Logout'); ?></li>
                 </ul>
                 <!-- /.dropdown-user -->
@@ -60,8 +58,6 @@ $student = $this->authex->getStudentInfo();
                     <i class="fa fa-user fa-fw"></i> <?php echo $student->first_name . " " . $student->last_name; ?> <i class="fa fa-caret-down"></i>
                 </a>
                 <ul class="dropdown-menu dropdown-user">
-                    <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a></li>
-                    <li class="divider"></li>
                     <li><?php echo anchor('Login/logout', '<i class="fa fa-sign-out fa-fw"></i> Logout'); ?></li>
                 </ul>
                 <!-- /.dropdown-user -->
@@ -71,7 +67,7 @@ $student = $this->authex->getStudentInfo();
         else {
             ?>
             <li class="dropdown">
-                <?php echo anchor('Login/login_screen', '<i class="fa fa-user fa-fw"></i> Login', 'class="dropdown-toggle"'); ?>
+                <?php echo anchor('Login', '<i class="fa fa-user fa-fw"></i> Login', 'class="dropdown-toggle"'); ?>
             </li>
             <?php
         }
@@ -94,8 +90,8 @@ $student = $this->authex->getStudentInfo();
                     </div>
                     <!-- /input-group -->
                 </li>
-                <li><?php echo anchor('Login_sysop/login_screen', 'SYSOP Login'); ?></li>
-                <li><?php echo anchor('Login_student/login_screen', 'Student Login'); ?></li>
+                <li><?php echo anchor('Login_sysop', 'SYSOP Login'); ?></li>
+                <li><?php echo anchor('Login_student', 'Student Login'); ?></li>
                 <li>
                     <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Charts<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">

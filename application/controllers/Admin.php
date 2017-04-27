@@ -6,7 +6,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * Home page
  */
 class Admin extends CI_Controller {
-
+    public function __construct() {
+        parent::__construct();
+        $this->user_control->adminLoggedIn();
+    }
+    
     public function index() {
         $data['title'] = "HH Prospects";
         $this->LoadView('sbadmin', $data);

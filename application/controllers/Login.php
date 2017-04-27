@@ -15,7 +15,7 @@ class Login extends CI_Controller {
         $this->load->model('User_model');
     }
 
-    public function LoadView($viewnaam, $data) {
+    public function LoadView($viewnaam, $data) {       
         $partials = array(
             'title' => $data['title'],
             'header' => $this->parser->parse('main_header', $data, true),
@@ -25,7 +25,9 @@ class Login extends CI_Controller {
         $this->parser->parse('main_master', $partials);
     }
 
-    public function login_screen() {
+    public function index() {
+        $this->user_control->notLoggedIn();
+        
         $data['title'] = 'Login - HH Prospects';
         $data['error'] = json_encode($this->session->flashdata('error'));
         $data['updated'] = json_encode($this->session->flashdata('updated'));
@@ -40,16 +42,20 @@ class Login extends CI_Controller {
         if ($this->authex->login($email, $password)) {
             $user = $this->User_model->getUser($email);
             
-            if ($user->level == 2)
-            {
-                redirect('Admin');
+            switch ($user->level) {
+                case 2:
+                    // Administrator
+                    redirect('Admin');
+                    break;
+                case 3:
+                    // Analyst
+                    redirect('Analyst');
+                    break;
             }
-            
-            redirect('Home');
         } else {
             $this->session->set_flashdata('error', 1);
 
-            redirect('Login/login_screen');
+            redirect('Login/index');
         }
     }
 
@@ -83,7 +89,7 @@ class Login extends CI_Controller {
     }
     
     public function send_email($email) {
-        $this->email->from('prospects@hh.se', 'Halmstad University Prospects');
+        $this->email->from('noreply@hh.se', 'Halmstad University Prospects');
         $this->email->to($email);
         $this->email->subject('Reset your password');
         $data = array();
@@ -125,7 +131,7 @@ class Login extends CI_Controller {
         if ($password === $passwordControl) {
             $this->User_model->update_password($email, $password);
             $this->session->set_flashdata('updated', 1);
-            redirect('Login/login_screen');
+            redirect('Login/index');
         } else {
             $this->session->set_flashdata('error', 1);
             redirect('Login/reset_password/' . urlencode($email) . '/' . sha1($email));
