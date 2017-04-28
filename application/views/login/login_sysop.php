@@ -1,7 +1,7 @@
 <div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header">Login SYSOP</h1>
+            <h1 class="page-header">SYSOP login</h1>
         </div>
     </div>
     <?php
@@ -11,7 +11,7 @@
     ?>
     <div class="row">
         <div class="col-lg-5 col-md-8">
-            <p><input class="form-control" type="text" id="emailadres" name="email" required="" placeholder="E-mail"></p>
+            <p><input class="form-control" type="email" id="emailadres" name="email" required="" placeholder="E-mail"></p>
         </div>
     </div>
     <div class="row">

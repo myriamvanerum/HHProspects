@@ -5,6 +5,7 @@ class Student_model extends CI_Model {
     function __construct() {
         parent::__construct();
         $this->load->helper('string');
+        $this->load->model('Student_model');
     }
 
     function get($id) {
@@ -17,6 +18,19 @@ class Student_model extends CI_Model {
         $this->db->order_by('first_name', 'asc');
         $query = $this->db->get('student');
         return $query->result();
+    }
+    
+    function getAllWithAdmin() {
+        $this->db->order_by('first_name', 'asc');
+        $query = $this->db->get('student');
+        
+        $students = $query->result();
+        
+        foreach($students as $student){
+            $student->admin = $this->User_model->get($student->admin_id);
+        }
+
+        return $students;
     }
 
     function getStudentByEmail($email) {
