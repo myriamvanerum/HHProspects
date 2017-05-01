@@ -13,7 +13,14 @@ class User_model extends CI_Model {
     }
 
     function getAll() {
-        $this->db->order_by('first_name', 'asc');
+        $this->db->order_by('last_name', 'asc');
+        $query = $this->db->get('user');
+        return $query->result();
+    }
+    
+    function getAllByLevel($level) {
+        $this->db->order_by('last_name', 'asc');
+        $this->db->where('level', $level);
         $query = $this->db->get('user');
         return $query->result();
     }
