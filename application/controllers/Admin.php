@@ -96,7 +96,23 @@ class Admin extends CI_Controller {
     public function insertEmailTemplate() {
         $email = new stdClass();
         $email->name = trim($this->input->post('name'));
+        $email->subject = $this->input->post('subject');
         $email->content = $this->input->post('content');
         $this->Email_model->insert($email);
+    }
+    
+    public function sendEmail($id) {
+        echo "test";
+        $email = $this->Email_model->get($id);
+        $group_id = $this->input->post('group_id');
+        $students = $this->Student_model->getFromGroup($group_id);
+        $email_addresses = array_column($students, 'email');
+        
+        $this->email->from('noreply@hh.se', 'Halmstad University Prospects');
+        $this->email->bcc($email_addresses);
+        $this->email->subject($email->subject);                
+        $this->email->message($email->content);
+        //$this->email->set_mailtype("html");
+        $this->email->send();
     }
 }

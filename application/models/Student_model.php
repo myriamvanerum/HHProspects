@@ -30,6 +30,12 @@ class Student_model extends CI_Model {
         return $query->result();
     }
     
+    function getFromGroup($group_id) {
+        $this->db->where('group_id', $group_id);
+        $query = $this->db->get('student');
+        return $query->result();
+    }
+    
     function getAllWithAdmin() {
         $this->db->order_by('last_name', 'asc');
         $query = $this->db->get('student');
