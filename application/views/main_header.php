@@ -1,5 +1,5 @@
-<?php 
-$user = $this->authex->getUserInfo(); 
+<?php
+$user = $this->authex->getUserInfo();
 $student = $this->authex->getStudentInfo();
 ?>
 <!-- Navigation -->
@@ -27,17 +27,16 @@ $student = $this->authex->getStudentInfo();
                     echo anchor('Analyst', 'Halmstad Hogskolan - Prospects', 'class="navbar-brand"');
                     break;
             }
-        } elseif($student != null) {
+        } elseif ($student != null) {
             echo anchor('Student', 'Halmstad Hogskolan - Prospects', 'class="navbar-brand"');
-        }
-        else {
+        } else {
             echo anchor('Home', 'Halmstad Hogskolan - Prospects', 'class="navbar-brand"');
         }
         ?>
     </div>
     <!-- /.navbar-header -->
 
-    <ul class="nav navbar-top-links navbar-right">
+    <ul class="nav navbar-top-links navbar-right navbar-collapse">
         <?php
         if ($user != null) {
             ?>
@@ -63,15 +62,14 @@ $student = $this->authex->getStudentInfo();
                 <!-- /.dropdown-user -->
             </li>
             <?php
-        }
-        else {
+        } else {
             ?>
             <li class="dropdown">
-                <?php echo anchor('Login', '<i class="fa fa-user fa-fw"></i> Login', 'class="dropdown-toggle"'); ?>
+            <?php echo anchor('Login', '<i class="fa fa-user fa-fw"></i> Login', 'class="dropdown-toggle"'); ?>
             </li>
-            <?php
-        }
-        ?>
+                <?php
+            }
+            ?>
         <!-- /.dropdown -->
     </ul>
     <!-- /.navbar-top-links -->
@@ -79,22 +77,46 @@ $student = $this->authex->getStudentInfo();
     <div class="navbar-default sidebar" role="navigation">
         <div class="sidebar-nav navbar-collapse">
             <ul class="nav" id="side-menu">
+                <?php
+                if ($user != null) {
+                    switch ($user->level) {
+                        case 1:
+                            // Sysop
+                            echo "<li>" . anchor('Sysop', '<span class="fa fa-home"></span> Home') . "</li>";
+                            break;
+                        case 2:
+                            // Administrator
+                            echo "<li>" . anchor('Admin', '<span class="fa fa-home"></span> Home') . "</li>";
+                            echo "<li>" . anchor('Admin/groups', '<span class="fa fa-group"></span> Groups') . "</li>";
+                            echo "<li>" . anchor('Admin/emails', '<span class="fa fa-envelope"></span> E-mails') . "</li>";
+                            break;
+                        case 3:
+                            // Analyst
+                            echo "<li>" . anchor('Analyst', '<span class="fa fa-home"></span> Home') . "</li>";
+                            break;
+                        }
+                } elseif ($student != null) {
+                    echo "<li>" . anchor('Student', '<span class="fa fa-home"></span> Home') . "</li>";
+                } else {
+                    echo "<li>" . anchor('Home', '<span class="fa fa-home"></span> Home') . "</li>";
+                }
+                ?>
                 <li><?php echo anchor('Login_sysop', 'SYSOP Login'); ?></li>
                 <li><?php echo anchor('Login_student', 'Student Login'); ?></li>
-<!--                <li>
-                    <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Charts<span class="fa arrow"></span></a>
-                    <ul class="nav nav-second-level">
-                        <li>
-                            <a href="flot.html">Flot Charts</a>
-                        </li>
-                        <li>
-                            <a href="morris.html">Morris.js Charts</a>
-                        </li>
-                    </ul>
-                     /.nav-second-level 
-                </li>
-                <li><a href="tables.html"><i class="fa fa-table fa-fw"></i> Tables</a></li>
-                <li><a href="forms.html"><i class="fa fa-edit fa-fw"></i> Forms</a></li>-->
+                <!--                <li>
+                                    <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Charts<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-second-level">
+                                        <li>
+                                            <a href="flot.html">Flot Charts</a>
+                                        </li>
+                                        <li>
+                                            <a href="morris.html">Morris.js Charts</a>
+                                        </li>
+                                    </ul>
+                                     /.nav-second-level 
+                                </li>
+                                <li><a href="tables.html"><i class="fa fa-table fa-fw"></i> Tables</a></li>
+                                <li><a href="forms.html"><i class="fa fa-edit fa-fw"></i> Forms</a></li>-->
             </ul>
         </div>
         <!-- /.sidebar-collapse -->

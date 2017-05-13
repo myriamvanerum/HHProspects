@@ -36,7 +36,7 @@ class Login extends CI_Controller {
     }
 
     public function login() {
-        $email = $this->input->post('email');
+        $email = trim($this->input->post('email'));
         $password = $this->input->post('password');
 
         if ($this->authex->login($email, $password)) {
@@ -124,7 +124,7 @@ class Login extends CI_Controller {
     }
     
     public function change_password() {
-        $email = $this->input->post('email');
+        $email = trim($this->input->post('email'));
         $password = $this->input->post('password');
         $passwordControl = $this->input->post('passwordControl');
 

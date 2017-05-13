@@ -8,12 +8,6 @@
     padding-bottom: 30px;
 }
 
-@media (max-width: 780px) {
-  #content {
-    margin-top: 80px;
-    }
-}
-
 .extraPaddingTop {
     padding-top: 5px;
 }

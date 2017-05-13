@@ -11,12 +11,19 @@ class Admin extends CI_Controller {
         $this->user_control->adminLoggedIn();
         $this->load->model('Student_model');
         $this->load->model('Group_model');
+        $this->load->model('Email_model');
     }
     
     public function index() {
-        $data['title'] = "HH Prospects";
+        $data['title'] = "Admin homepage - HH Prospects";
         
         $this->LoadView('admin/home', $data);
+    }
+    
+    public function emails() {
+        $data['title'] = "Emails - HH Prospects";
+        
+        $this->LoadView('admin/emails', $data);
     }
 
     public function LoadView($viewnaam, $data) {
@@ -32,7 +39,7 @@ class Admin extends CI_Controller {
     
     public function getStudents() {
         $data['students'] = $this->Student_model->getAllWithAdmin();
-        $this->load->view('admin/students', $data);
+        $this->load->view('admin/students_table', $data);
     }
     
     public function getStudent($id) {
@@ -45,7 +52,7 @@ class Admin extends CI_Controller {
         echo json_encode($admins);
     }
     
-    public function getGroups() {
+    public function getGroupsJSON() {
         $groups = $this->Group_model->getAll();
         echo json_encode($groups);
     }
@@ -54,7 +61,7 @@ class Admin extends CI_Controller {
         $student = new stdClass();
         $student->first_name = $this->input->post('first_name');
         $student->last_name = $this->input->post('last_name');
-        $student->email = $this->input->post('email');
+        $student->email = trim($this->input->post('email'));
         $student->person_number = $this->input->post('person_number');
         $student->country = $this->input->post('country');
         $student->admin_id = $this->input->post('admin_id');
@@ -64,5 +71,32 @@ class Admin extends CI_Controller {
         $student->instruction_language = $this->input->post('instruction_language');
         $student->application_number = $this->input->post('application_number');
         $this->Student_model->insert($student);
+    }
+    
+    public function uploadFile() {
+        echo "not functional";
+    }
+    
+    public function insertGroup() {
+        $group = new stdClass();
+        $group->name = trim($this->input->post('name'));
+        $this->Group_model->insert($group);
+    }
+    
+    public function getEmailTemplates() {
+        $data['email_templates'] = $this->Email_model->getAll();
+        $this->load->view('admin/emails_table', $data);
+    }
+    
+    public function getEmailTemplate($id) {
+        $email = $this->Email_model->get($id);
+        echo json_encode($email);
+    }
+    
+    public function insertEmailTemplate() {
+        $email = new stdClass();
+        $email->name = trim($this->input->post('name'));
+        $email->content = $this->input->post('content');
+        $this->Email_model->insert($email);
     }
 }

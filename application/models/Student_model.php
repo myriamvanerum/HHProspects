@@ -5,7 +5,6 @@ class Student_model extends CI_Model {
     function __construct() {
         parent::__construct();
         $this->load->helper('string');
-        $this->load->model('Student_model');
     }
 
     function get($id) {

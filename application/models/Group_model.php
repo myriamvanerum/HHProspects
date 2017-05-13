@@ -17,4 +17,8 @@ class Group_model extends CI_Model {
         $query = $this->db->get('group');
         return $query->result();
     }
+    
+    function insert($group) {
+        $this->db->insert('group', $group);
+    }
 }

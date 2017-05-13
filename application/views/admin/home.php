@@ -38,7 +38,7 @@
     // Get all groups
     function getGroups() {
         $.ajax({type: "POST",
-            url: site_url + "/Admin/getGroups",
+            url: site_url + "/Admin/getGroupsJSON",
             data: {},
             async: false,
             success: function (result) {
@@ -62,13 +62,11 @@
         $("#first_name").val(student.first_name);
         $("#last_name").val(student.last_name);
         $("#email").val(student.email);
-        $("#person_number").val(student.person_number);
         $("#country").val(student.country);
         $("#admin").val(student.admin.first_name + " " + student.admin.last_name);
         $("#zip_code").val(student.zip_code);
         $("#language").val(student.language);
         $("#instruction_language").val(student.instruction_language);
-        $("#application_number").val(student.application_number);
         $("#group").val(student.group.name);
     }
 
@@ -85,7 +83,6 @@
         $("#insert_first_name").val('');
         $("#insert_last_name").val('');
         $("#insert_email").val('');
-        $("#insert_person_number").val('');
         $("#insert_country").val('');
         $("#insert_admin").empty();
         combobox = document.getElementById("insert_admin");
@@ -99,7 +96,6 @@
         $("#insert_zip_code").val('');
         $("#insert_language").val('');
         $("#insert_instruction_language").val('');
-        $("#insert_application_number").val('');
         $("#insert_group").empty();
         combobox = document.getElementById("insert_group");
         groups.forEach(function (group) {
@@ -118,13 +114,11 @@
                 first_name: $("#insert_first_name").val(),
                 last_name: $("#insert_last_name").val(),
                 email: $("#insert_email").val(),
-                person_number: $("#insert_person_number").val(),
                 country: $("#insert_country").val(),
                 admin_id: $("#insert_admin").val(),
                 zip_code: $("#insert_zip_code").val(),
                 language: $("#insert_language").val(),
                 instruction_language: $("#insert_instruction_language").val(),
-                application_number: $("#insert_application_number").val(),
                 group_id: $("#insert_group").val()
             },
             async: false,
@@ -137,15 +131,103 @@
         getStudents();
 
     });
+    
+    // Upload excel file
+    $(document).on('click', '#upload', function () {
+        getAdmins();
+        getGroups();
+        fillUploadModal();
+        $('#modalUpload').modal('show');
+
+    });
+    
+    function fillUploadModal() {
+        $("#upload_file").val('');
+        $("#upload_admin").empty();
+        combobox = document.getElementById("upload_admin");
+        admins.forEach(function (admin) {
+            option = document.createElement("option");
+            option.text = admin.first_name + ' ' + admin.last_name;
+            option.value = admin.id;
+            combobox.appendChild(option);
+        });
+        $("#insert_admin").val(<?php echo $user->id; ?>);
+        $("#upload_group").empty();
+        combobox = document.getElementById("upload_group");
+        groups.forEach(function (group) {
+            option = document.createElement("option");
+            option.text = group.name;
+            option.value = group.id;
+            combobox.appendChild(option);
+        });
+    }
+
+    $(document).on('click', '#uploadSave', function () {
+        event.preventDefault();
+        
+        var formData = new FormData();
+        formData.append("upload_file", $("#upload_file")[0].files[0]);
+        
+        $.ajax({
+            type: "POST",
+            url: site_url + '/Admin/uploadFile',
+            data: {
+                admin_id: $("#upload_admin").val(),
+                group_id: $("#upload_group").val(),
+                formData
+            },
+            processData: false,
+            contentType: false,
+            async: false,
+            success: function (data) {
+                console.log("success:", data);
+            }
+        });
+        $('#modalUpload').modal('toggle');
+
+        getStudents();
+
+    });
+    
+    // Insert group
+    $(document).on('click', '#insertGroup', function () {
+        fillInsertGroupModal();
+        $('#modalInsertGroup').modal('show');
+
+    });
+
+    function fillInsertGroupModal() {
+        $("#insert_group_name").val('');
+    }
+
+    $(document).on('click', '#insertGroupSave', function () {
+        $.ajax({
+            type: "POST",
+            url: site_url + '/Admin/insertGroup',
+            data: {
+                name: $("#insert_group_name").val()
+            },
+            async: false,
+            success: function (data) {
+                console.log("success:", data);
+            }
+        });
+        $('#modalInsertGroup').modal('toggle');
+
+        getStudents();
+
+    });
 </script>
 <div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
             <h1 class="page-header">Administrator homepage</h1>
-            <p class="text-right">
+            <h3 class='col-sm-4'>Student list</h3>
+            <h3 class="text-right col-sm-8">
                 <button class="btn btn-primary" id="insert"><span class="fa fa-user-plus"></span> Add a student</button>
-                <?php echo anchor('Admin/importStudents', '<span class="fa fa-file-excel-o"></span> Import students', 'class="btn btn-primary"'); ?>
-            </p>
+                <button class="btn btn-primary" id="upload"><span class="fa fa-file-excel-o"></span> Import students</button>
+                <button class="btn btn-primary" id="insertGroup"><span class="fa fa-users"></span> Add a group</button>
+            </h3>
             <div id="students"></div>
         </div>
         <!-- /.col-lg-12 -->
@@ -192,16 +274,6 @@
                         <label for="zip_code" class="col-sm-2 control-label">ZIP Code:</label>
                         <div class="col-sm-4">
                             <input type="input" class="form-control" id="zip_code" placeholder="ZIP Code" readonly>
-                        </div>
-                    </div>
-                    <div class="row form-group">
-                        <label for="person_number" class="col-sm-2 control-label">Person number:</label>
-                        <div class="col-sm-4">
-                            <input type="input" class="form-control" id="person_number" placeholder="Person number" readonly>
-                        </div>
-                        <label for="application_number" class="col-sm-2 control-label">Application number:</label>
-                        <div class="col-sm-4">
-                            <input type="input" class="form-control" id="application_number" placeholder="Application number" readonly>
                         </div>
                     </div>
                     <div class="row form-group">
@@ -272,16 +344,6 @@
                         </div>
                     </div>
                     <div class="row form-group">
-                        <label for="insert_person_number" class="col-sm-2 control-label">Person number:</label>
-                        <div class="col-sm-4">
-                            <input type="text" class="form-control" id="insert_person_number" placeholder="Person number" pattern="[0-9]{6}-[0-9]{4}" required>
-                        </div>
-                        <label for="insert_application_number" class="col-sm-2 control-label">Application number:</label>
-                        <div class="col-sm-4">
-                            <input type="input" class="form-control" id="insert_application_number" placeholder="Application number" required>
-                        </div>
-                    </div>
-                    <div class="row form-group">
                         <label for="insert_language" class="col-sm-2 control-label">Language:</label>
                         <div class="col-sm-4">
                             <input type="input" class="form-control" id="insert_language" placeholder="Language" required>
@@ -303,6 +365,70 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 <button type="submit" class="btn btn-primary"  id="insertSave">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Upload file modal-->
+<div class="modal fade" id="modalUpload" tabindex="-1" role="dialog" aria-labelledby="modalUploadLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="modalUploadLabel">Upload student excel file</h4> 
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="row form-group">
+                        <label for="upload_file" class="col-sm-2 control-label">Excel file:</label>
+                        <div class="col-sm-10">
+                            <input type="file" class="form-control" id="upload_file" required data-allowed-file-extensions='["xlsx"]'>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label for="upload_group" class="col-sm-2 control-label">Group:</label>
+                        <div class="col-sm-4">
+                            <select name="upload_group" id="upload_group" class="form-control" required>
+                            </select>
+                        </div>
+                        <label for="upload_admin" class="col-sm-2 control-label">Administrator:</label>
+                        <div class="col-sm-4">
+                            <select name="upload_admin" id="upload_admin" class="form-control" required>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-primary"  id="uploadSave">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Insert group modal-->
+<div class="modal fade" id="modalInsertGroup" tabindex="-1" role="dialog" aria-labelledby="modalInsertGroupLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="modalInsertGroupLabel">Add new group</h4> 
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="row form-group">
+                        <label for="insert_group_name" class="col-sm-4 control-label">Group name:</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="insert_group_name" placeholder="Group name" required>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-primary"  id="insertGroupSave">Submit</button>
             </div>
         </div>
     </div>

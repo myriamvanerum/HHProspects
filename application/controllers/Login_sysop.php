@@ -34,7 +34,7 @@ class Login_sysop extends CI_Controller {
     }
 
     public function login() {
-        $email = $this->input->post('email');
+        $email = trim($this->input->post('email'));
         $password = $this->input->post('password');
 
         if ($this->authex->loginSysop($email, $password)) {
