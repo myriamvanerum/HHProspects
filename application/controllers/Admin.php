@@ -12,6 +12,7 @@ class Admin extends CI_Controller {
         $this->load->model('Student_model');
         $this->load->model('Group_model');
         $this->load->model('Email_model');
+        $this->load->library('encryption');
     }
     
     public function index() {
@@ -62,14 +63,22 @@ class Admin extends CI_Controller {
         $student->first_name = $this->input->post('first_name');
         $student->last_name = $this->input->post('last_name');
         $student->email = trim($this->input->post('email'));
-        $student->person_number = $this->input->post('person_number');
         $student->country = $this->input->post('country');
         $student->admin_id = $this->input->post('admin_id');
         $student->group_id = $this->input->post('group_id');
         $student->zip_code = $this->input->post('zip_code');
         $student->language = $this->input->post('language');
         $student->instruction_language = $this->input->post('instruction_language');
-        $student->application_number = $this->input->post('application_number');
+        
+        $this->encryption->initialize(
+                array(
+                    'cipher' => 'aes-256',
+                    'mode' => 'cbc',
+                    'key' => $this->config->encryption_key
+                )
+        );
+        $student->password = $this->encryption->encrypt($this->authex->randomPassword());
+        
         $this->Student_model->insert($student);
     }
     
@@ -102,7 +111,6 @@ class Admin extends CI_Controller {
     }
     
     public function sendEmail($id) {
-        echo "test";
         $email = $this->Email_model->get($id);
         $group_id = $this->input->post('group_id');
         $students = $this->Student_model->getFromGroup($group_id);
@@ -110,9 +118,14 @@ class Admin extends CI_Controller {
         
         $this->email->from('noreply@hh.se', 'Halmstad University Prospects');
         $this->email->bcc($email_addresses);
-        $this->email->subject($email->subject);                
-        $this->email->message($email->content);
-        //$this->email->set_mailtype("html");
+        $this->email->subject($email->subject);
+        
+        $data = array();
+        $data['email_content'] = preg_replace("/\r\n|\r|\n/",'<br/>', $email->content);
+        
+        //$this->email->message($this->load->view('emails/email_template', $data, TRUE));
+        $this->email->message(preg_replace("/\r\n|\r|\n/",'<br/>', $email->content));
+        $this->email->set_mailtype("html");
         $this->email->send();
     }
 }
