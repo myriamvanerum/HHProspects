@@ -73,7 +73,6 @@
                         <div class="description center" style="font-family:'Muli','Arial Narrow',Arial;Margin:0;text-align:center;max-width:320px;color:#a1a8ad;line-height:24px;font-size:15px;Margin-bottom:10px;margin-left: auto; margin-right: auto;">
                             <div style="color: rgb(161, 168, 173); background-color: rgb(255, 255, 255);">
                                 <?php echo $email_content;?>
-                                Test
                             </div>
                         </div>
                         <!--[if (gte mso 9)|(IE)]><br>&nbsp;<![endif]-->

@@ -92,7 +92,9 @@ $student = $this->authex->getStudentInfo();
                             break;
                         case 3:
                             // Analyst
-                            echo "<li>" . anchor('Analyst', '<span class="fa fa-home"></span> Home') . "</li>";
+                            echo "<li>" . anchor('Analyst', '<span class="fa fa-bullhorn"></span> Surveys') . "</li>";
+                            echo "<li>" . anchor('Analyst/questions', '<span class="fa fa-question-circle"></span> Questions') . "</li>";
+                            echo "<li>" . anchor('Analyst/analysis', '<span class="fa fa-binoculars"></span> Analysis') . "</li>";
                             break;
                         }
                 } elseif ($student != null) {

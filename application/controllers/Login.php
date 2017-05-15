@@ -96,7 +96,7 @@ class Login extends CI_Controller {
         
         $data['url'] = base_url() . 'index.php/Login/reset_password/' . urlencode($email) . '/' . sha1($email);
         
-        $this->email->message($this->load->view('emails/reset_password_email', $data, TRUE));
+        $this->email->message($this->load->view('emails/reset_password_email', $data, true));
         $this->email->set_mailtype("html");
         $this->email->send();
     }

@@ -10,11 +10,13 @@ class Analyst extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->user_control->analystLoggedIn();
+        $this->load->model('Survey_model');
+        $this->load->model('Question_model');
     }
     
     public function index() {
         $data['title'] = "HH Prospects";
-        $this->LoadView('home', $data);
+        $this->LoadView('analyst/surveys', $data);
     }
 
     public function LoadView($viewnaam, $data) {
@@ -27,5 +29,20 @@ class Analyst extends CI_Controller {
         );
         
         $this->parser->parse('main_master', $partials);
+    }
+    
+    public function getSurveys() {
+        $data['surveys'] = $this->Survey_model->getAll();
+        $this->load->view('analyst/surveys_table', $data);
+    }
+    
+    public function questions() {
+        $data['title'] = "HH Prospects";
+        $this->LoadView('analyst/questions', $data);
+    }
+    
+    public function getQuestions() {
+        $data['questions'] = $this->Question_model->getAll();
+        $this->load->view('analyst/questions_table', $data);
     }
 }

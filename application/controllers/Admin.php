@@ -18,7 +18,7 @@ class Admin extends CI_Controller {
     public function index() {
         $data['title'] = "Admin homepage - HH Prospects";
         
-        $this->LoadView('admin/home', $data);
+        $this->LoadView('admin/admin_home', $data);
     }
     
     public function emails() {
