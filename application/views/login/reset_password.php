@@ -11,7 +11,7 @@
     <input class="form-control hidden" type="text" id="email" name="email" value="<?php echo $email;?>" readonly>
     <div class="row">
         <div class="col-lg-5 col-md-8">
-            <p><input class="form-control" type="password" id="password" name="password" required="" placeholder="Password"></p>
+            <p><input class="form-control" type="password" id="password" name="password" required="" placeholder="Password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"></p>
         </div>
     </div>
     <div class="row">

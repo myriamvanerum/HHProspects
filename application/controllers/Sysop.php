@@ -3,10 +3,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 //***************************Myriam Van Erum********************************
 /**
  * Page coded by Myriam Van Erum 
- * Home page
+ * Sysop controller
  */
 class Sysop extends CI_Controller {
 
+    public function __construct() {
+        parent::__construct();
+        $this->user_control->sysopLoggedIn();
+    }
+    
     public function index() {
         $data['title'] = "HH Prospects";
         $this->LoadView('home', $data);

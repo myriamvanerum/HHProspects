@@ -15,7 +15,7 @@ class Login extends CI_Controller {
         $this->load->model('User_model');
     }
 
-    public function LoadView($viewnaam, $data) {
+    public function LoadView($viewnaam, $data) {       
         $partials = array(
             'title' => $data['title'],
             'header' => $this->parser->parse('main_header', $data, true),
@@ -25,7 +25,9 @@ class Login extends CI_Controller {
         $this->parser->parse('main_master', $partials);
     }
 
-    public function login_screen() {
+    public function index() {
+        $this->user_control->notLoggedIn();
+        
         $data['title'] = 'Login - HH Prospects';
         $data['error'] = json_encode($this->session->flashdata('error'));
         $data['updated'] = json_encode($this->session->flashdata('updated'));
@@ -34,22 +36,26 @@ class Login extends CI_Controller {
     }
 
     public function login() {
-        $email = $this->input->post('email');
+        $email = trim($this->input->post('email'));
         $password = $this->input->post('password');
 
         if ($this->authex->login($email, $password)) {
             $user = $this->User_model->getUser($email);
             
-            if ($user->level == 2)
-            {
-                redirect('Admin');
+            switch ($user->level) {
+                case 2:
+                    // Administrator
+                    redirect('Admin');
+                    break;
+                case 3:
+                    // Analyst
+                    redirect('Analyst');
+                    break;
             }
-            
-            redirect('Home');
         } else {
             $this->session->set_flashdata('error', 1);
 
-            redirect('Login/login_screen');
+            redirect('Login/index');
         }
     }
 
@@ -90,10 +96,11 @@ class Login extends CI_Controller {
         
         $data['url'] = base_url() . 'index.php/Login/reset_password/' . urlencode($email) . '/' . sha1($email);
         
-        $this->email->message($this->load->view('emails/reset_password_email', $data, TRUE));
-        $this->email->set_mailtype("html");
+        //$this->email->message($this->load->view('emails/reset_password_email', $data, true));
+        $this->email->message(base_url() . 'index.php/Login/reset_password/' . urlencode($email) . '/' . sha1($email));
+        //$this->email->set_mailtype("html");
         $this->email->send();
-    }
+        }
     
     public function reset_password($email, $encr_email) {
         $email = urldecode($email);
@@ -118,14 +125,14 @@ class Login extends CI_Controller {
     }
     
     public function change_password() {
-        $email = $this->input->post('email');
+        $email = trim($this->input->post('email'));
         $password = $this->input->post('password');
         $passwordControl = $this->input->post('passwordControl');
 
         if ($password === $passwordControl) {
             $this->User_model->update_password($email, $password);
             $this->session->set_flashdata('updated', 1);
-            redirect('Login/login_screen');
+            redirect('Login/index');
         } else {
             $this->session->set_flashdata('error', 1);
             redirect('Login/reset_password/' . urlencode($email) . '/' . sha1($email));

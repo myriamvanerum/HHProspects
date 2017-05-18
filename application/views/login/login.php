@@ -11,7 +11,7 @@
     ?>
     <div class="row">
         <div class="col-lg-5 col-md-8">
-            <p><input class="form-control" type="text" id="emailadres" name="email" required="" placeholder="E-mail"></p>
+            <p><input class="form-control" type="email" id="emailadres" name="email" required="" placeholder="E-mail"></p>
         </div>
     </div>
     <div class="row">
@@ -47,5 +47,12 @@
     echo form_submit('loginSubmit', 'Login', "class='btn btn-primary'");
     echo form_close();
     ?>
-    <p class="extraPaddingTop"><?php echo anchor('Login/forgot_password', 'Forgot your password?'); ?></p>
+    <div class="row extraPaddingTop">
+            <div class="col-lg-3 col-md-4">
+                <?php echo anchor('Login/forgot_password', 'Forgot your password?'); ?>
+            </div>
+            <div class="col-lg-2 col-md-4 text-right">
+                <?php echo anchor('Login_student', 'Are you a student?'); ?>
+            </div>
+        </div>
 </div>

@@ -12,11 +12,42 @@ class Student_model extends CI_Model {
         $query = $this->db->get('student');
         return $query->row();
     }
+    
+    function getWithAdmin($id) {
+        $this->db->where('id', $id);
+        $query = $this->db->get('student');        
+        $student = $query->row();
+        
+        $student->admin = $this->User_model->get($student->admin_id);
+        $student->group = $this->Group_model->get($student->group_id);
+
+        return $student;
+    }
 
     function getAll() {
-        $this->db->order_by('first_name', 'asc');
+        $this->db->order_by('last_name', 'asc');
         $query = $this->db->get('student');
         return $query->result();
+    }
+    
+    function getFromGroup($group_id) {
+        $this->db->where('group_id', $group_id);
+        $query = $this->db->get('student');
+        return $query->result();
+    }
+    
+    function getAllWithAdmin() {
+        $this->db->order_by('last_name', 'asc');
+        $query = $this->db->get('student');
+        
+        $students = $query->result();
+        
+        foreach($students as $student){
+            $student->admin = $this->User_model->get($student->admin_id);
+            $student->group = $this->Group_model->get($student->group_id);
+        }
+
+        return $students;
     }
 
     function getStudentByEmail($email) {
@@ -78,5 +109,9 @@ class Student_model extends CI_Model {
     
     function logPasswordReset($login_attempt) {
         $this->db->insert('student_failed_login_log', $login_attempt);
+    }
+    
+    function insert($student) {
+        $this->db->insert('student', $student);
     }
 }

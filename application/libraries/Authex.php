@@ -90,7 +90,7 @@ class Authex {
     public function sendEmailTooManyAttempts($user_email, $timestamp) {
         $CI = & get_instance();
 
-        $CI->email->from('prospects@hh.se', 'Halmstad University Prospects');
+        $CI->email->from('noreply@hh.se', 'Halmstad University Prospects');
         $adminEmail = "myriamvanerum@hotmail.com";
         $CI->email->to($adminEmail);
         $CI->email->subject('Failed SYSOP Login Attempts');
@@ -101,8 +101,9 @@ class Authex {
         $data['ip'] = $_SERVER['REMOTE_ADDR'];
         $data['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
 
-        $CI->email->message($CI->load->view('emails/sysop_login_attempts_email', $data, TRUE));
-        $CI->email->set_mailtype("html");
+        //$CI->email->message($CI->load->view('emails/sysop_login_attempts_email', $data, TRUE));
+        $CI->email->message("Failed logins for SYSOP\nEmail: " . $user_email . "\nTimestamp: " . $timestamp . "\nIP: " . $_SERVER['REMOTE_ADDR'] . "\nUser agent: " . $_SERVER['HTTP_USER_AGENT']);
+        //$CI->email->set_mailtype("html");
         $CI->email->send();
     }
 
@@ -209,7 +210,7 @@ class Authex {
     public function sendEmailTooManyAttemptsStudent($student, $new_password) {
         $CI = & get_instance();
 
-        $CI->email->from('prospects@hh.se', 'Halmstad University Prospects');
+        $CI->email->from('noreply@hh.se', 'Halmstad University Prospects');
         $CI->email->to($student->email);
         $CI->email->subject('HH Prospects Failed Login');
 
@@ -217,8 +218,9 @@ class Authex {
         $data['student_name'] = $student->first_name . " " . $student->last_name;
         $data['new_password'] = $new_password;
 
-        $CI->email->message($CI->load->view('emails/student_login_attempts_email', $data, TRUE));
-        $CI->email->set_mailtype("html");
+        //$CI->email->message($CI->load->view('emails/student_login_attempts_email', $data, TRUE));
+        //$CI->email->set_mailtype("html");
+        $CI->email->message("Hi " . $student->first_name . " " . $student->last_name . "\nHere is your new password: " . $new_password);
         $CI->email->send();
     }
 
@@ -227,7 +229,7 @@ class Authex {
 
         $admin = $CI->User_model->get($student->admin_id);
 
-        $CI->email->from('prospects@hh.se', 'Halmstad University Prospects');
+        $CI->email->from('noreply@hh.se', 'Halmstad University Prospects');
         $CI->email->to($admin->email);
         $CI->email->subject('HH Prospects Failed Login By Student');
 
@@ -237,8 +239,9 @@ class Authex {
         $data['student_email'] = $student->email;
         $data['timestamp'] = $timestamp;
 
-        $CI->email->message($CI->load->view('emails/admin_login_attempts_email', $data, TRUE));
-        $CI->email->set_mailtype("html");
+        //$CI->email->message($CI->load->view('emails/admin_login_attempts_email', $data, TRUE));
+        //$CI->email->set_mailtype("html")
+        $CI->email->message("Hi " . $admin->first_name . " " . $admin->last_name . "\n" . $student->first_name . " " . $student->last_name . " (" . $student->email . ") failed too many times to log in and has been issued a new password");
         $CI->email->send();
     }
 

@@ -10,7 +10,7 @@
     ?>
     <div class="row">
         <div class="col-lg-5 col-md-8">
-            <p><input class="form-control" type="text" id="emailadres" name="email" required="" placeholder="E-mail"></p>
+            <p><input class="form-control" type="email" id="emailadres" name="email" required="" placeholder="E-mail"></p>
         </div>
     </div>
     <?php
