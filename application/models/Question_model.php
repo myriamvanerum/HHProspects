@@ -12,6 +12,7 @@ class Question_model extends CI_Model {
         $question = $query->row();
         
         $question->question_type = $this->getType($question->question_type_id);
+        $question->answer_options = $this->getAnswerOptions($question->id);
 
         return $question;
     }
@@ -36,5 +37,23 @@ class Question_model extends CI_Model {
         $this->db->where('id', $id);
         $query = $this->db->get('question_type');
         return $query->row();
+    }
+    
+    function getAnswerOptions($question_id) {
+        $this->db->where('question_id', $question_id);
+        $query = $this->db->get('question_answer_option');
+        $question_answer_options = $query->result();
+        
+        $answer_options = array();
+        
+        foreach($question_answer_options as $question_answer_option){
+            $this->db->where('id', $question_answer_option->answer_option_id);
+            $query = $this->db->get('answer_option');
+            $answer_option =  $query->row();
+            array_push($answer_options, $answer_option->answer);
+        }
+        
+        return $answer_options;
+        
     }
 }

@@ -39,6 +39,18 @@
         $("#question_type").val(question.question_type.name);
         $("#description").val(question.description);
         $("#question").val(question.text);
+        if ((question.answer_options).length === 0)
+        {
+            $("#answer_options_div").hide();
+        }
+        else
+        {
+            $("#answer_options_div").show();
+            $("#answer_options").empty();
+            $.each(question.answer_options, function(index, value) {
+                $("#answer_options").append("<li class='list-group-item'>" + value + "</li>");
+            });
+        }
     }
 </script>
 <div id="page-wrapper">
@@ -91,7 +103,12 @@
                             <textarea rows="3" cols="40" id="question" class="form-control" placeholder="Question" readonly style="resize:none"></textarea>
                         </div>
                     </div>
-                    answer options
+                    <div class="row form-group" id="answer_options_div">
+                        <h4 class="col-sm-12">Answer options</h4>
+                        <div class="col-sm-12">
+                            <ul id="answer_options" class="list-group"></ul>
+                        </div>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
