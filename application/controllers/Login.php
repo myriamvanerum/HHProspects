@@ -89,17 +89,18 @@ class Login extends CI_Controller {
     }
     
     public function send_email($email) {
-        $this->email->from('noreply@hh.se', 'Halmstad University Prospects');
+        $this->email->from('prospects@hh.se', 'Halmstad University Prospects');
         $this->email->to($email);
         $this->email->subject('Reset your password');
         $data = array();
         
         $data['url'] = base_url() . 'index.php/Login/reset_password/' . urlencode($email) . '/' . sha1($email);
         
-        $this->email->message($this->load->view('emails/reset_password_email', $data, true));
-        $this->email->set_mailtype("html");
+        //$this->email->message($this->load->view('emails/reset_password_email', $data, true));
+        $this->email->message(base_url() . 'index.php/Login/reset_password/' . urlencode($email) . '/' . sha1($email));
+        //$this->email->set_mailtype("html");
         $this->email->send();
-    }
+        }
     
     public function reset_password($email, $encr_email) {
         $email = urldecode($email);

@@ -9,7 +9,11 @@ class Question_model extends CI_Model {
     function get($id) {
         $this->db->where('id', $id);
         $query = $this->db->get('question');
-        return $query->row();
+        $question = $query->row();
+        
+        $question->question_type = $this->getType($question->question_type_id);
+
+        return $question;
     }
 
     function getAll() {

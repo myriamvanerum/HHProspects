@@ -45,4 +45,14 @@ class Analyst extends CI_Controller {
         $data['questions'] = $this->Question_model->getAll();
         $this->load->view('analyst/questions_table', $data);
     }
+    
+    public function getQuestion($id) {
+        $question = $this->Question_model->get($id);
+        echo json_encode($question);
+    }
+    
+    public function analysis() {
+        $data['title'] = "HH Prospects";
+        $this->LoadView('analyst/analysis', $data);
+    }
 }
