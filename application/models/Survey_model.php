@@ -14,6 +14,7 @@ class Survey_model extends CI_Model {
         $survey = $query->row();
         
         $survey->group = $this->Group_model->get($survey->group_id);
+        $survey->questions = $this->Question_model->getQuestionsBySurvey($survey->id);
         
         return $survey;
     }

@@ -43,6 +43,24 @@
         $("#used_on").val(survey.used_on);
         $("#starts_on").val(survey.starts_on);
         $("#ends_on").val(survey.ends_on);
+
+        $("#questions").empty();
+        for (i = 0; i < survey.questions.length; i++)
+        {
+            $("#questions").append("<div class='panel panel-default'>" +
+                    "<div class='panel-heading'><a data-toggle='collapse' style='display:block' href='#collapse" + survey.questions[i].id + "'>" + survey.questions[i].text + " <span class='fa fa-caret-down pull-right'></span></a></div>" +
+                    "<ul id='collapse" + survey.questions[i].id + "' class='list-group panel-collapse collapse'></ul></div>");
+            
+            for (j = 0; j < survey.questions[i].answer_options.length; j++)
+            {
+                $("#collapse" + survey.questions[i].id).append("<li class='list-group-item'>" + survey.questions[i].answer_options[j] + "</li>");
+            }
+            
+            if (survey.questions[i].answer_options.length === 0) 
+            {
+                $("#collapse" + survey.questions[i].id).append("<li class='list-group-item'>This question is answered in text by the students.</li>");
+            }
+        }
     }
 </script>
 <div id="page-wrapper">
@@ -117,25 +135,20 @@
                     </div>
                     <div class="row" id="questions_div">
                         <h4 class="col-sm-12">Questions</h4>
-                        <div class="col-sm-12">
-                            <ul id="questions" class="list-group"></ul>
-                        </div>
-                        <div class="col-sm-12">
+                        <div class="col-sm-12" id="questions">
                             <div class="panel panel-default">
-                            <!-- Default panel contents -->
-                            <div class="panel-heading">Panel heading</div>
-
-                            <!-- List group -->
-                            <ul class="list-group">
-                                <li class="list-group-item">Cras justo odio</li>
-                                <li class="list-group-item">Dapibus ac facilisis in</li>
-                                <li class="list-group-item">Morbi leo risus</li>
-                                <li class="list-group-item">Porta ac consectetur ac</li>
-                                <li class="list-group-item">Vestibulum at eros</li>
-                            </ul>
+                                <!-- Default panel contents -->
+                                <div class="panel-heading"><a data-toggle="collapse" href="#collapse1">Collapsible list group</a></div>
+                                <!-- List group -->
+                                <ul id="collapse1" class="list-group panel-collapse collapse">
+                                    <li class="list-group-item">Cras justo odio</li>
+                                    <li class="list-group-item">Dapibus ac facilisis in</li>
+                                    <li class="list-group-item">Morbi leo risus</li>
+                                    <li class="list-group-item">Porta ac consectetur ac</li>
+                                    <li class="list-group-item">Vestibulum at eros</li>
+                                </ul>
+                            </div>
                         </div>
-                        </div>
-                        
                     </div>
                 </form>
             </div>

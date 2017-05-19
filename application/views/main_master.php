@@ -13,9 +13,6 @@
 
         <link rel="shortcut icon" href="<?php echo base_url(); ?>application/css/favicon.ico">
 
-        <!-- Custom CSS -->
-        <link href="<?php echo base_url(); ?>application/css/custom.css" rel="stylesheet">
-        
         <!-- Bootstrap Core CSS -->
         <link href="<?php echo base_url(); ?>application/css/bootstrap.min.css" rel="stylesheet">
         
@@ -30,6 +27,9 @@
 
         <!-- Morris Charts CSS -->
         <!--<link href="<?php echo base_url(); ?>application/css/morris.css" rel="stylesheet">-->
+        
+        <!-- Custom CSS -->
+        <link href="<?php echo base_url(); ?>application/css/custom.css" rel="stylesheet">
 
         <!-- Custom Fonts -->
         <link href="<?php echo base_url(); ?>application/css/font-awesome.min.css" rel="stylesheet" type="text/css">

@@ -125,4 +125,20 @@ class Question_model extends CI_Model {
         $this->db->where('id', $id);
         $this->db->delete('question');
     }
+    
+    function getQuestionsBySurvey($survey_id) {
+        $this->db->where('survey_id', $survey_id);
+        $query = $this->db->get('survey_question');
+        $survey_questions = $query->result();
+        
+        $questions = array();
+        
+        foreach($survey_questions as $survey_question){
+            $question = $this->get($survey_question->question_id);
+            array_push($questions, $question);
+        }
+        
+        return $questions;
+        
+    }
 }
