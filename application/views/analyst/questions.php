@@ -15,6 +15,17 @@
         });
     }
 
+    // Is this question used in any surveys?
+    function isQuestionUsedInSurvey($id) {
+        $.ajax({type: "POST",
+            url: site_url + "/Analyst/isQuestionUsedInSurvey/" + $id,
+            async: false,
+            success: function (result) {
+                questionUsed = jQuery.parseJSON(result);
+            }
+        });
+    }
+
     // Get all questions for table
     function getQuestions() {
         $.ajax({type: "POST",
@@ -125,6 +136,48 @@
         $("#insert_answer_options").append("<li class='list-group-item'>" + $("#insert_answer_option_name").val() + "</li>");
         $('#modalInsertAnswerOption').modal('toggle');
     });
+
+    // Delete question
+    $(document).on('click', '.delete', function () {
+        getQuestion($(this).attr('value'));
+        isQuestionUsedInSurvey($(this).attr('value'));
+        fillDeleteModal();
+        $('#modalDelete').modal('show');
+    });
+
+    function fillDeleteModal() {
+        if (questionUsed === true)
+        {
+            // Question caanot be deleted
+            $("#modalDeleteLabel").html("Can\'t delete this question");
+            $("#deleteText").html("The question <strong>\"" + question.text + "\"</strong> cannot be deleted because a survey still uses this question.");
+            $("#deleteOK").hide();
+            $("#deleteFail").show();
+        } else {
+            // Question OK to delete
+            $("#modalDeleteLabel").html("Delete question");
+            $("#deleteText").html("Are you sure you want to remove the question <strong>\"" + question.text + "\"</strong>?");
+            $("#deleteSave").attr('value', question.id);
+            $("#deleteOK").show();
+            $("#deleteFail").hide();
+        }
+    }
+
+    $(document).on('click', '#deleteSave', function () {
+        $.ajax({
+            type: "POST",
+            url: site_url + '/Analyst/deleteQuestion/' + $(this).prop('value'),
+            data: {},
+            async: false,
+            success: function (data) {
+                console.log("success:", data);
+            }
+        });
+
+        getQuestions();
+    });
+
+
 </script>
 <div id="page-wrapper">
     <div class="row">
@@ -265,6 +318,30 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 <button type="submit" class="btn btn-primary"  id="insertAnswerOptionSave">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete question modal-->
+<div class="modal fade" id="modalDelete" tabindex="-1" role="dialog" aria-labelledby="modalDeleteLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="modalDeleteLabel"></h4> 
+            </div>
+            <div class="modal-body">
+                <p id="deleteText"></p>
+            </div>
+            <div class="modal-footer">
+                <div id="deleteOK">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger" data-dismiss="modal" id="deleteSave" value="">Delete</button>
+                </div>
+                <div id="deleteFail">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+                </div>
             </div>
         </div>
     </div>

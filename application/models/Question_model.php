@@ -107,4 +107,22 @@ class Question_model extends CI_Model {
         $query = $this->db->get('survey_question');
         return $query->num_rows();
     }
+    
+    function isQuestionUsedInSurvey($id) {
+        $this->db->where('question_id', $id);
+        $query = $this->db->get('survey_question');
+        if ($query->num_rows() >= 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    function delete($id) {
+        $this->db->where('question_id', $id);
+        $this->db->delete('question_answer_option');
+        
+        $this->db->where('id', $id);
+        $this->db->delete('question');
+    }
 }

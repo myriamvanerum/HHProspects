@@ -36,6 +36,11 @@ class Analyst extends CI_Controller {
         $this->load->view('analyst/surveys_table', $data);
     }
     
+    public function getSurvey($id) {
+        $survey = $this->Survey_model->get($id);
+        echo json_encode($survey);
+    }
+    
     public function questions() {
         $data['title'] = "HH Prospects";
         $this->LoadView('analyst/questions', $data);
@@ -49,6 +54,11 @@ class Analyst extends CI_Controller {
     public function getQuestion($id) {
         $question = $this->Question_model->get($id);
         echo json_encode($question);
+    }
+    
+    public function isQuestionUsedInSurvey($id) {
+        $questionUsed = $this->Question_model->isQuestionUsedInSurvey($id);
+        echo json_encode($questionUsed);
     }
     
     public function getQuestionTypes() {
@@ -66,6 +76,10 @@ class Analyst extends CI_Controller {
         
         $answer_options = $this->input->post('answer_options');
         $this->Question_model->insertAnswerOption($answer_options, $question_id);
+    }
+    
+    public function deleteQuestion($id) {
+        $this->Question_model->delete($id);
     }
     
     public function analysis() {

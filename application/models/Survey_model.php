@@ -11,7 +11,11 @@ class Survey_model extends CI_Model {
     function get($id) {
         $this->db->where('id', $id);
         $query = $this->db->get('survey');
-        return $query->row();
+        $survey = $query->row();
+        
+        $survey->group = $this->Group_model->get($survey->group_id);
+        
+        return $survey;
     }
 
     function getAll() {
