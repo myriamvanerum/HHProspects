@@ -51,6 +51,23 @@ class Analyst extends CI_Controller {
         echo json_encode($question);
     }
     
+    public function getQuestionTypes() {
+        $question_types = $this->Question_model->getAllQuestionTypes();
+        echo json_encode($question_types);
+    }
+    
+    public function insertQuestion() {
+        $question = new stdClass();
+        $question->title = $this->input->post('title');
+        $question->question_type_id = $this->input->post('question_type');
+        $question->description = $this->input->post('description');
+        $question->text = $this->input->post('question');
+        $question_id = $this->Question_model->insert($question);
+        
+        $answer_options = $this->input->post('answer_options');
+        $this->Question_model->insertAnswerOption($answer_options, $question_id);
+    }
+    
     public function analysis() {
         $data['title'] = "HH Prospects";
         $this->LoadView('analyst/analysis', $data);

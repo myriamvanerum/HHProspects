@@ -5,6 +5,7 @@ class Survey_model extends CI_Model {
     function __construct() {
         parent::__construct();
         $this->load->model('Group_model');
+        $this->load->model('Question_model');
     }
 
     function get($id) {
@@ -20,6 +21,7 @@ class Survey_model extends CI_Model {
         
         foreach($surveys as $survey){
             $survey->group = $this->Group_model->get($survey->group_id);
+            $survey->question_count = $this->Question_model->getSurveyQuestionCount($survey->id);
         }
 
         return $surveys;

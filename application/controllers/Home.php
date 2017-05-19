@@ -11,6 +11,8 @@ class Home extends CI_Controller {
     }
     
     public function index() {
+        $this->user_control->notLoggedIn();
+        
         $data['title'] = "HH Prospects";
         $this->LoadView('home', $data);
     }

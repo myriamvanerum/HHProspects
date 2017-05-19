@@ -31,6 +31,7 @@ class Question_model extends CI_Model {
     
     function insert($question) {
         $this->db->insert('question', $question);
+        return $this->db->insert_id();
     }
     
     function getType($id) {
@@ -55,5 +56,55 @@ class Question_model extends CI_Model {
         
         return $answer_options;
         
+    }
+    
+    function getAllQuestionTypes() {
+        $this->db->order_by('name', 'asc');
+        $query = $this->db->get('question_type');
+        return $query->result();
+    }
+    
+    function insertAnswerOption($answer_options, $question_id) {
+        foreach ($answer_options as $answer_option_text) {
+            $question_answer_option = new stdClass();
+            $question_answer_option->question_id = $question_id;
+            
+            $answer_option = new stdClass();
+            $answer_option->answer = $answer_option_text;
+                
+            // Does this answer_option already exist?
+            $answer_option_id = $this->existsAnswerOption($answer_option_text);
+            
+            if ($answer_option_id != 0)
+            {
+                // yes --> save association with this id
+                $question_answer_option->answer_option_id = $answer_option_id;                
+            }
+            else
+            {
+                // no --> insert + save association with new id
+                $this->db->insert('answer_option', $answer_option);
+                $question_answer_option->answer_option_id = $this->db->insert_id();
+            }
+            
+            $this->db->insert('question_answer_option', $question_answer_option);
+        }
+    }
+    
+    function existsAnswerOption($answer) {
+        $this->db->where('LOWER(answer)', strtolower(trim($answer)));
+        $query = $this->db->get('answer_option');
+        $answer_option = $query->row();
+        if ($query->num_rows() >= 1) {
+            return $answer_option->id;
+        } else {
+            return 0;
+        }
+    }
+    
+    function getSurveyQuestionCount($survey_id){
+        $this->db->where('survey_id', $survey_id);
+        $query = $this->db->get('survey_question');
+        return $query->num_rows();
     }
 }
