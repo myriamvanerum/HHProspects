@@ -36,7 +36,7 @@
         var questionIds = new Array();
         
         // don't show questions that have already been added
-        $("#questions .delete").each(function () {
+        $("#questions .questionRow").each(function () {
             questionIds.push($(this).attr('value'));
         });
         
@@ -69,7 +69,7 @@
         });
         
         // see which questions were already added
-        $("#questions .delete").each(function () {
+        $("#questions .questionRow").each(function () {
             questionIds.push($(this).attr('value'));
         });
         
@@ -93,10 +93,12 @@
     $(document).on('click', '.delete', function () {
         var questionIds = new Array();
         
-        $("#questions .delete").each(function () {
+        // see which questions were already added
+        $("#questions .questionRow").each(function () {
             questionIds.push($(this).attr('value'));
         });
         
+        // remove the question that was selected
         questionIds.splice( $.inArray($(this).attr('value'), questionIds), 1);
         
         showSurveyQuestions(questionIds);
@@ -115,53 +117,41 @@
     <div class="row form-group">
         <label for="name" class="col-sm-2 control-label">Name:</label>
         <div class="col-sm-10">
-            <input type="input" class="form-control" id="name" placeholder="Name" required>
+            <input type="input" class="form-control" id="name" name="name" placeholder="Name" required>
         </div>
     </div>
     <div class="row form-group">
         <label for="group" class="col-sm-2 control-label">Group:</label>
         <div class="col-sm-10">
-            <select name="group" id="group" class="form-control"></select>
+            <select name="group" id="group" name="group" class="form-control"></select>
         </div>
     </div>
     <div class="row form-group">
         <label for="description" class="col-sm-2 control-label">Description:</label>
         <div class="col-sm-10">
-            <textarea rows="3" cols="40" id="description" class="form-control" placeholder="Description" required style="resize:none"></textarea>
+            <textarea rows="3" cols="40" id="description" name="description" class="form-control" placeholder="Description" required style="resize:none"></textarea>
         </div>
     </div>
     <div class="row form-group">
         <label for="comment" class="col-sm-2 control-label">Comment:</label>
         <div class="col-sm-10">
-            <textarea rows="3" cols="40" id="comment" class="form-control" placeholder="Comment" required style="resize:none"></textarea>
-        </div>
-    </div>
-    <div class="row form-group">
-        <label for="created_on" class="col-sm-2 control-label">Created on:</label>
-        <div class="col-sm-4">
-            <input type="date" class="form-control" id="created_on" placeholder="Created on" required>
-        </div>
-        <label for="used_on" class="col-sm-2 control-label">Last used on:</label>
-        <div class="col-sm-4">
-            <input type="date" class="form-control" id="used_on" placeholder="Last used on" required>
+            <textarea rows="3" cols="40" id="comment" name="comment" class="form-control" placeholder="Comment" required style="resize:none"></textarea>
         </div>
     </div>
     <div class="row form-group">
         <label for="starts_on" class="col-sm-2 control-label">Starts on:</label>
         <div class="col-sm-4">
-            <input type="date" class="form-control" id="starts_on" placeholder="Starts on" required >
+            <input type="date" class="form-control" id="starts_on" name="starts_on" placeholder="Starts on" required >
         </div>
         <label for="ends_on" class="col-sm-2 control-label">Ends on:</label>
         <div class="col-sm-4">
-            <input type="date" class="form-control" id="ends_on" placeholder="Ends on" required>
+            <input type="date" class="form-control" id="ends_on" name="ends_on" placeholder="Ends on" required>
         </div>
     </div>
     <div class="row" id="questions_div">
         <h4 class="col-sm-12">Questions <a class="btn btn-primary pull-right" id="addQuestion"><span class="fa fa-plus"></span> Add questions</a></h4>
         <div class="col-sm-12" id="questions">
-            You haven't added any questions to this survey yet.
-            <br>
-            <br>
+            You haven't added any questions to this survey yet.<br><br>
         </div>
     </div>
     <?php

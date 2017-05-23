@@ -34,6 +34,7 @@ class Survey_model extends CI_Model {
     
     function insert($survey) {
         $this->db->insert('survey', $survey);
+        return $this->db->insert_id();
     }
     
     function toggleActive($survey) {

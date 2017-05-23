@@ -120,7 +120,7 @@
                     <div class="row form-group">
                         <label for="description" class="col-sm-2 control-label">Description:</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="description" placeholder="Description" readonly>
+                            <textarea rows="3" cols="40" id="description" class="form-control" placeholder="Description" readonly style="resize:none"></textarea>
                         </div>
                     </div>
                     <div class="row form-group">

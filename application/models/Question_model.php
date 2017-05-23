@@ -173,4 +173,14 @@ class Question_model extends CI_Model {
         $this->db->where('id', $question->id);
         $this->db->update('question', $question);
     }
+    
+    function insertSurveyQuestions($question_ids, $survey_id) {
+        foreach ($question_ids as $question_id) {
+            $survey_question = new stdClass();
+            $survey_question->question_id = $question_id;
+            $survey_question->survey_id = $survey_id;
+            
+            $this->db->insert('survey_question', $survey_question);
+        }
+    }
 }

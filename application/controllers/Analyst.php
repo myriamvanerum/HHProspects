@@ -74,8 +74,24 @@ class Analyst extends CI_Controller {
             $this->load->view('analyst/survey_questions_table', $data);
         } else {
             echo "You haven't added any questions to this survey yet.<br><br>";
-        }
+        } 
+    }
+    
+    public function insertSurvey() {
+        $survey = new stdClass();
+        $survey->name = $this->input->post('name');
+        $survey->group_id = $this->input->post('group');
+        $survey->description = $this->input->post('description');
+        $survey->comment = $this->input->post('comment');
+        $survey->created_on = date('Y-m-d H:i:s');
+        $survey->used_on = date('Y-m-d H:i:s');
+        $survey->starts_on = $this->input->post('starts_on');
+        $survey->ends_on = $this->input->post('ends_on');
+        $survey->active = TRUE;
+        $survey_id = $this->Survey_model->insert($survey);
         
+        $question_ids = $this->input->post('questions');
+        $this->Question_model->insertSurveyQuestions($question_ids, $survey_id);
     }
     
     public function questions() {
