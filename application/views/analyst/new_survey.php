@@ -33,9 +33,19 @@
     });
 
     function getAddQuestions(searchString) {
+        var questionIds = new Array();
+        
+        // don't show questions that have already been added
+        $("#questions .delete").each(function () {
+            questionIds.push($(this).attr('value'));
+        });
+        
         $.ajax({type: "POST",
             url: site_url + "/Analyst/getAddQuestions",
-            data: {searchString: searchString},
+            data: {
+                searchString: searchString,
+                questionIds: questionIds
+                },
             async: false,
             success: function (result) {
                 $("#add_questions").html(result);
@@ -48,6 +58,48 @@
         $('#searchQuestion').keyup(function () {
             getAddQuestions($(this).val());
         });
+    });
+
+    $(document).on('click', '#addSave', function () {
+        var questionIds = new Array();
+
+        // see which questions the user want to add
+        $("#add_questions input:checked").each(function () {
+            questionIds.push($(this).attr('id'));
+        });
+        
+        // see which questions were already added
+        $("#questions .delete").each(function () {
+            questionIds.push($(this).attr('value'));
+        });
+        
+        showSurveyQuestions(questionIds);
+
+        $('#modalAdd').modal('toggle');
+    });
+    
+    function showSurveyQuestions(questionIds) {
+        $.ajax({type: "POST",
+            url: site_url + "/Analyst/showAddedQuestions",
+            data: {questionIds: questionIds},
+            async: false,
+            success: function (result) {
+                $("#questions").html(result);
+            }
+        });
+    }
+    
+    // Delete question from survey
+    $(document).on('click', '.delete', function () {
+        var questionIds = new Array();
+        
+        $("#questions .delete").each(function () {
+            questionIds.push($(this).attr('value'));
+        });
+        
+        questionIds.splice( $.inArray($(this).attr('value'), questionIds), 1);
+        
+        showSurveyQuestions(questionIds);
     });
 </script>
 <div id="page-wrapper">
@@ -108,6 +160,8 @@
         <h4 class="col-sm-12">Questions <a class="btn btn-primary pull-right" id="addQuestion"><span class="fa fa-plus"></span> Add questions</a></h4>
         <div class="col-sm-12" id="questions">
             You haven't added any questions to this survey yet.
+            <br>
+            <br>
         </div>
     </div>
     <?php

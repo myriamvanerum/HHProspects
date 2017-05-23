@@ -54,7 +54,8 @@ class Analyst extends CI_Controller {
     
     public function getAddQuestions() {
         $searchString = $this->input->post('searchString');
-        $data['questions'] = $this->Question_model->getAllActive($searchString);
+        $questionIds = $this->input->post('questionIds');
+        $data['questions'] = $this->Question_model->getAllActive($searchString, $questionIds);
         $this->load->view('analyst/add_questions_table', $data);
     }
     
@@ -64,6 +65,17 @@ class Analyst extends CI_Controller {
         $survey->active = $this->input->post('active');
         $survey->active = !$survey->active;
         $this->Survey_model->toggleActive($survey);
+    }
+    
+    public function showAddedQuestions() {
+        $questionIds = $this->input->post('questionIds');
+        if (count($questionIds) != 0) {
+            $data['questions'] = $this->Question_model->getByIdArray($questionIds);
+            $this->load->view('analyst/survey_questions_table', $data);
+        } else {
+            echo "You haven't added any questions to this survey yet.<br><br>";
+        }
+        
     }
     
     public function questions() {

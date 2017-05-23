@@ -29,10 +29,23 @@ class Question_model extends CI_Model {
         return $questions;
     }
     
-    function getAllActive($searchString) {
+    function getAllActive($searchString, $ids) {
         $this->db->where('active', TRUE);
         $this->db->like('text', $searchString);
-        $this->db->order_by('title', 'asc');
+        $this->db->where_not_in('id', $ids);
+        $this->db->order_by('text', 'asc');
+        $query = $this->db->get('question');
+        $questions = $query->result();
+        
+        foreach($questions as $question){
+            $question->question_type = $this->getType($question->question_type_id);
+        }
+
+        return $questions;
+    }
+    
+    function getByIdArray($ids) {
+        $this->db->where_in('id', $ids);
         $query = $this->db->get('question');
         $questions = $query->result();
         
