@@ -22,3 +22,7 @@ html {
   bottom: 0;
   width: 100%;
 }
+
+.hyperlinkNoLayout {
+    color: red;
+}

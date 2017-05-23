@@ -89,7 +89,7 @@ class Login extends CI_Controller {
     }
     
     public function send_email($email) {
-        $this->email->from('prospects@hh.se', 'Halmstad University Prospects');
+        $this->email->from('noreply@hh.se', 'Halmstad University Prospects');
         $this->email->to($email);
         $this->email->subject('Reset your password');
         $data = array();

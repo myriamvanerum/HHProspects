@@ -29,6 +29,20 @@ class Question_model extends CI_Model {
         return $questions;
     }
     
+    function getAllActive($searchString) {
+        $this->db->where('active', TRUE);
+        $this->db->like('text', $searchString);
+        $this->db->order_by('title', 'asc');
+        $query = $this->db->get('question');
+        $questions = $query->result();
+        
+        foreach($questions as $question){
+            $question->question_type = $this->getType($question->question_type_id);
+        }
+
+        return $questions;
+    }
+    
     function insert($question) {
         $this->db->insert('question', $question);
         return $this->db->insert_id();
@@ -140,5 +154,10 @@ class Question_model extends CI_Model {
         
         return $questions;
         
+    }
+    
+    function toggleActive($question) {
+        $this->db->where('id', $question->id);
+        $this->db->update('question', $question);
     }
 }

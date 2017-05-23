@@ -69,7 +69,7 @@
             <h1 class="page-header">Analyst homepage</h1>
             <h3 class='col-sm-4'>Survey list</h3>
             <h3 class="text-right col-sm-8">
-                <button class="btn btn-primary" id="insert"><span class="fa fa-plus"></span> Add a survey</button>
+                <?php echo anchor("Analyst/newSurvey", "<span class='fa fa-plus'></span> Add a survey", 'class="btn btn-primary"');?>
             </h3>
             <div id="surveys"></div>
         </div>
@@ -90,26 +90,26 @@
             <div class="modal-body">
                 <form class="form-horizontal">
                     <div class="row form-group">
-                        <label for="name" class="col-sm-3 control-label">Name:</label>
-                        <div class="col-sm-9">
+                        <label for="name" class="col-sm-2 control-label">Name:</label>
+                        <div class="col-sm-10">
                             <input type="input" class="form-control" id="name" placeholder="Name" readonly>
                         </div>
                     </div>
                     <div class="row form-group">
-                        <label for="group" class="col-sm-3 control-label">Group:</label>
-                        <div class="col-sm-9">
+                        <label for="group" class="col-sm-2 control-label">Group:</label>
+                        <div class="col-sm-10">
                             <input type="input" class="form-control" id="group" placeholder="Group" readonly>
                         </div>
                     </div>
                     <div class="row form-group">
-                        <label for="description" class="col-sm-3 control-label">Description:</label>
-                        <div class="col-sm-9">
+                        <label for="description" class="col-sm-2 control-label">Description:</label>
+                        <div class="col-sm-10">
                             <input type="text" class="form-control" id="description" placeholder="Description" readonly>
                         </div>
                     </div>
                     <div class="row form-group">
-                        <label for="comment" class="col-sm-3 control-label">Comment:</label>
-                        <div class="col-sm-9">
+                        <label for="comment" class="col-sm-2 control-label">Comment:</label>
+                        <div class="col-sm-10">
                             <textarea rows="3" cols="40" id="comment" class="form-control" placeholder="Comment" readonly style="resize:none"></textarea>
                         </div>
                     </div>
@@ -136,18 +136,6 @@
                     <div class="row" id="questions_div">
                         <h4 class="col-sm-12">Questions</h4>
                         <div class="col-sm-12" id="questions">
-                            <div class="panel panel-default">
-                                <!-- Default panel contents -->
-                                <div class="panel-heading"><a data-toggle="collapse" href="#collapse1">Collapsible list group</a></div>
-                                <!-- List group -->
-                                <ul id="collapse1" class="list-group panel-collapse collapse">
-                                    <li class="list-group-item">Cras justo odio</li>
-                                    <li class="list-group-item">Dapibus ac facilisis in</li>
-                                    <li class="list-group-item">Morbi leo risus</li>
-                                    <li class="list-group-item">Porta ac consectetur ac</li>
-                                    <li class="list-group-item">Vestibulum at eros</li>
-                                </ul>
-                            </div>
                         </div>
                     </div>
                 </form>

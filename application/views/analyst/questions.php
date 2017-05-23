@@ -177,7 +177,21 @@
         getQuestions();
     });
 
+    // Toggle active inactive question
+    $(document).on('click', '.toggleActive', function () {
+        getQuestion($(this).attr('value'));
+        $.ajax({
+            type: "POST",
+            url: site_url + '/Analyst/toggleActive/' + $(this).attr('value'),
+            data: {active: question.active},
+            async: false,
+            success: function (data) {
+                console.log("success:", data);
+            }
+        });
 
+        getQuestions();
+    });
 </script>
 <div id="page-wrapper">
     <div class="row">

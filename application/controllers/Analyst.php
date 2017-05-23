@@ -12,6 +12,7 @@ class Analyst extends CI_Controller {
         $this->user_control->analystLoggedIn();
         $this->load->model('Survey_model');
         $this->load->model('Question_model');
+        $this->load->model('Group_model');
     }
     
     public function index() {
@@ -39,6 +40,22 @@ class Analyst extends CI_Controller {
     public function getSurvey($id) {
         $survey = $this->Survey_model->get($id);
         echo json_encode($survey);
+    }
+    
+    public function newSurvey() {
+        $data['title'] = "HH Prospects";
+        $this->LoadView('analyst/new_survey', $data);
+    }
+    
+    public function getGroups() {
+        $groups = $this->Group_model->getAll();
+        echo json_encode($groups);
+    }
+    
+    public function getAddQuestions() {
+        $searchString = $this->input->post('searchString');
+        $data['questions'] = $this->Question_model->getAllActive($searchString);
+        $this->load->view('analyst/add_questions_table', $data);
     }
     
     public function questions() {
@@ -80,6 +97,14 @@ class Analyst extends CI_Controller {
     
     public function deleteQuestion($id) {
         $this->Question_model->delete($id);
+    }
+    
+    public function toggleActive($id) {
+        $question = new stdClass();
+        $question->id = $id;
+        $question->active = $this->input->post('active');
+        $question->active = !$question->active;
+        $this->Question_model->toggleActive($question);
     }
     
     public function analysis() {
