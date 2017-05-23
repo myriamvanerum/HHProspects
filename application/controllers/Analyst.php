@@ -58,6 +58,14 @@ class Analyst extends CI_Controller {
         $this->load->view('analyst/add_questions_table', $data);
     }
     
+    public function toggleSurveyActive($id) {
+        $survey = new stdClass();
+        $survey->id = $id;
+        $survey->active = $this->input->post('active');
+        $survey->active = !$survey->active;
+        $this->Survey_model->toggleActive($survey);
+    }
+    
     public function questions() {
         $data['title'] = "HH Prospects";
         $this->LoadView('analyst/questions', $data);
@@ -99,7 +107,7 @@ class Analyst extends CI_Controller {
         $this->Question_model->delete($id);
     }
     
-    public function toggleActive($id) {
+    public function toggleQuestionActive($id) {
         $question = new stdClass();
         $question->id = $id;
         $question->active = $this->input->post('active');

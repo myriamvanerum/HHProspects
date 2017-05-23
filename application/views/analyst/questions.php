@@ -182,7 +182,7 @@
         getQuestion($(this).attr('value'));
         $.ajax({
             type: "POST",
-            url: site_url + '/Analyst/toggleActive/' + $(this).attr('value'),
+            url: site_url + '/Analyst/toggleQuestionActive/' + $(this).attr('value'),
             data: {active: question.active},
             async: false,
             success: function (data) {

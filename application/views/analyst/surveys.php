@@ -62,6 +62,22 @@
             }
         }
     }
+    
+    // Toggle active inactive survey
+    $(document).on('click', '.toggleActive', function () {
+        getSurvey($(this).attr('value'));
+        $.ajax({
+            type: "POST",
+            url: site_url + '/Analyst/toggleSurveyActive/' + $(this).attr('value'),
+            data: {active: survey.active},
+            async: false,
+            success: function (data) {
+                console.log("success:", data);
+            }
+        });
+
+        getSurveys();
+    });
 </script>
 <div id="page-wrapper">
     <div class="row">
