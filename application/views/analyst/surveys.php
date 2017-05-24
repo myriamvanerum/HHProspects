@@ -48,7 +48,7 @@
         for (i = 0; i < survey.questions.length; i++)
         {
             $("#questions").append("<div class='panel panel-default'>" +
-                    "<div class='panel-heading'><a data-toggle='collapse' style='display:block' href='#collapse" + survey.questions[i].id + "'>" + survey.questions[i].text + " <span class='fa fa-caret-down pull-right'></span></a></div>" +
+                    "<div class='panel-heading'><a data-toggle='collapse' style='display:block' href='#collapse" + survey.questions[i].id + "'>" + survey.questions[i].text + " <span class='fa fa-chevron-down pull-right'></span></a></div>" +
                     "<ul id='collapse" + survey.questions[i].id + "' class='list-group panel-collapse collapse'></ul></div>");
             
             for (j = 0; j < survey.questions[i].answer_options.length; j++)

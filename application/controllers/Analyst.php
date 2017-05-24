@@ -92,6 +92,8 @@ class Analyst extends CI_Controller {
         
         $question_ids = $this->input->post('questions');
         $this->Question_model->insertSurveyQuestions($question_ids, $survey_id);
+        
+        redirect('Analyst');
     }
     
     public function questions() {
