@@ -50,7 +50,8 @@ class Survey_model extends CI_Model {
         $query = $this->db->get('survey');
         if ($query->num_rows() > 0) {
             $survey = $query->first_row();
-            //$survey->questions = $this->Question_model->getSurveyQuestions($survey->id);
+            $survey->questions = $this->Question_model->getSurveyQuestions($survey->id);
+            return $survey;
         } else {
             return null;
         }

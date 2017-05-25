@@ -167,7 +167,40 @@ class Question_model extends CI_Model {
         
         foreach ($questions as $question) {
             $question->question_type = $this->getType($question->question_type_id);
-            $question->answer_options = $this->getAnswerOptions($question->id);
+            $question->answer_options = $this->getQuestionAnswerOptions($question->id);
+        }
+        
+        return $questions;
+    }
+    
+    function getQuestionAnswerOptions($question_id) {
+        $this->db->where('question_id', $question_id);
+        $query = $this->db->get('question_answer_option');
+        $question_answer_options = $query->result();
+        
+        $answer_options = array();
+        
+        foreach($question_answer_options as $question_answer_option){
+            $this->db->where('id', $question_answer_option->answer_option_id);
+            $query = $this->db->get('answer_option');
+            $answer_option =  $query->row();
+            array_push($answer_options, $answer_option);
+        }
+        
+        return $answer_options;
+        
+    }
+    
+    function getQuestionsBySurvey($survey_id) {
+        $this->db->where('survey_id', $survey_id);
+        $query = $this->db->get('survey_question');
+        $survey_questions = $query->result();
+        
+        $questions = array();
+        
+        foreach($survey_questions as $survey_question){
+            $question = $this->get($survey_question->question_id);
+            array_push($questions, $question);
         }
         
         return $questions;

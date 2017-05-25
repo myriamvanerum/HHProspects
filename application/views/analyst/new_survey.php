@@ -199,7 +199,7 @@
     <div class="row form-group">
         <label for="group" class="col-sm-2 control-label">Group:</label>
         <div class="col-sm-10">
-            <select name="group" id="group" name="group" class="form-control"></select>
+            <select id="group" name="group" class="form-control"></select>
         </div>
     </div>
     <div class="row form-group">
@@ -217,7 +217,7 @@
     <div class="row form-group">
         <label for="starts_on" class="col-sm-2 control-label">Starts on:</label>
         <div class="col-sm-4">
-            <input type="date" class="form-control" id="starts_on" name="starts_on" placeholder="Starts on" required >
+            <input type="date" class="form-control" id="starts_on" name="starts_on" placeholder="Starts on" required>
         </div>
         <label for="ends_on" class="col-sm-2 control-label">Ends on:</label>
         <div class="col-sm-4">

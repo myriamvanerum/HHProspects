@@ -20,15 +20,19 @@ class Student extends CI_Controller {
         
         if ($activeSurvey != null) {
             $data['title'] = "HH Prospects";
+            $data['success'] = $this->session->flashdata('success');
             $data['surveys'] = array("surveys" => $activeSurvey);
             $this->LoadView('student/student', $data);
         } else {
             $data['title'] = "HH Prospects";
             $this->LoadView('student/no_survey', $data);
-            
-            
-            
         }
+    }
+    
+    public function sendSurvey() {
+        
+        $this->session->set_flashdata('success', 1);
+        redirect("Student");
     }
 
     public function LoadView($viewnaam, $data) {
