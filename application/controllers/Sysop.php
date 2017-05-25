@@ -14,7 +14,7 @@ class Sysop extends CI_Controller {
     
     public function index() {
         $data['title'] = "HH Prospects";
-        $this->LoadView('home', $data);
+        $this->LoadView('sysop/sysop', $data);
     }
 
     public function LoadView($viewnaam, $data) {

@@ -77,9 +77,16 @@ class Admin extends CI_Controller {
                     'key' => $this->config->encryption_key
                 )
         );
-        $student->password = $this->encryption->encrypt($this->authex->randomPassword());
+        $unencryptedPassword = $this->authex->randomPassword();
+        $student->password = $this->encryption->encrypt($unencryptedPassword);
         
         $this->Student_model->insert($student);
+        
+        $this->email->from('noreply@hh.se', 'Halmstad University Prospects');
+        $this->email->to($student->email);
+        $this->email->subject('HH Prospects New Account');
+        $this->email->message("Hi " . $student->first_name . " " . $student->last_name . "\nA new account was made for you on the Halmstad University Prospects webapp.\nHere is your new password: " . $unencryptedPassword);
+        $this->email->send();
     }
     
     public function uploadFile() {

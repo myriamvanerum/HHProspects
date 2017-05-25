@@ -153,7 +153,7 @@ class Question_model extends CI_Model {
         $this->db->delete('question');
     }
     
-    function getQuestionsBySurvey($survey_id) {
+    function getSurveyQuestions($survey_id) {
         $this->db->where('survey_id', $survey_id);
         $query = $this->db->get('survey_question');
         $survey_questions = $query->result();
@@ -163,6 +163,11 @@ class Question_model extends CI_Model {
         foreach($survey_questions as $survey_question){
             $question = $this->get($survey_question->question_id);
             array_push($questions, $question);
+        }
+        
+        foreach ($questions as $question) {
+            $question->question_type = $this->getType($question->question_type_id);
+            $question->answer_options = $this->getAnswerOptions($question->id);
         }
         
         return $questions;
@@ -179,7 +184,6 @@ class Question_model extends CI_Model {
             $survey_question = new stdClass();
             $survey_question->question_id = $question_id;
             $survey_question->survey_id = $survey_id;
-            
             $this->db->insert('survey_question', $survey_question);
         }
     }

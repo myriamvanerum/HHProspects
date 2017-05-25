@@ -10,11 +10,25 @@ class Student extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->user_control->studentLoggedIn();
+        $this->load->model('Student_model');
+        $this->load->model('Survey_model');
     }
     
     public function index() {
-        $data['title'] = "HH Prospects";
-        $this->LoadView('home', $data);
+        $student = $this->authex->getStudentInfo();
+        $activeSurvey = $this->Survey_model->getStudentActiveSurvey($student->group_id);
+        
+        if ($activeSurvey != null) {
+            $data['title'] = "HH Prospects";
+            $data['surveys'] = array("surveys" => $activeSurvey);
+            $this->LoadView('student/student', $data);
+        } else {
+            $data['title'] = "HH Prospects";
+            $this->LoadView('student/no_survey', $data);
+            
+            
+            
+        }
     }
 
     public function LoadView($viewnaam, $data) {
