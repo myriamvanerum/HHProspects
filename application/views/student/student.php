@@ -1,5 +1,11 @@
 <?php $survey = current($surveys); ?>
 <?php $student = $this->authex->getStudentInfo(); ?>
+<script type="text/javascript">
+    // Submit survey
+    $(document).on('click', '#formSubmit', function () {
+        
+    });
+</script>
 <div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
@@ -20,11 +26,9 @@
                 </div>
                 <?php
             }
-            $attributes = array('name' => 'surveyForm');
-            echo form_open('Student/sendSurvey', $attributes);
             foreach ($survey->questions as $question) {
                 ?>
-                <div class="panel panel-default">
+                <div class="panel panel-default" id="question<?php echo $question->id;?>">
                     <div class="panel-heading"><?php echo $question->text ?></div>
                     <div class="panel-body">
                         <?php
@@ -34,23 +38,19 @@
                                 foreach ($question->answer_options as $answer_option) {
                                     ?>
                                     <div class="checkbox">
-                                        <label><input type="checkbox" name="question<?php echo $question->id; ?>" value="<?php echo $answer_option->id; ?>"><?php echo $answer_option->answer;?></label>
+                                        <label><input type="checkbox" id="comment<?php echo $question->id; ?>" name="question<?php echo $question->id; ?>" value="<?php echo $answer_option->id; ?>" <?php echo ($answer_option->chosen == TRUE) ? 'checked=""' : '';?>><?php echo $answer_option->answer;?></label>
                                     </div>
                                     <?php
                                 }
                                 break;
-                            case 2:
-                                // Text
-                                ?>
-                                <textarea rows="3" name="question<?php echo $question->id; ?>" class="form-control" placeholder="Please type your answer here" style="resize:vertical"></textarea>
-                                <?php
-                                break;
                             case 3:
-                                // Radio
+                            case 5:
+                            case 6:
+                                // Radio, Yes/No, True/False
                                 foreach ($question->answer_options as $answer_option) {
                                     ?>
                                     <div class="radio">
-                                        <label><input type="radio" name="question<?php echo $question->id; ?>" value="<?php echo $answer_option->id; ?>"><?php echo $answer_option->answer;?></label>
+                                        <label><input type="radio" id="comment<?php echo $question->id; ?>" name="question<?php echo $question->id; ?>" value="<?php echo $answer_option->id; ?>" <?php echo ($answer_option->chosen == TRUE) ? 'checked=""' : '';?>><?php echo $answer_option->answer;?></label>
                                     </div>
                                     <?php
                                 }
@@ -58,35 +58,16 @@
                             case 4:
                                 // Dropdown
                                 ?>
-                                <select name="question<?php echo $question->id; ?>" class="form-control">
+                                <select id="comment<?php echo $question->id; ?>" name="question<?php echo $question->id; ?>" class="form-control">
                                 <?php
                                 foreach ($question->answer_options as $answer_option) {
-                                    echo '<option value="' . $answer_option->id . '">' . $answer_option->answer . '</option>';
+                                    ?>
+                                    <option value="<?php echo $answer_option->id;?>" <?php echo ($answer_option->chosen == TRUE) ? 'selected=""' : '';?>><?php echo $answer_option->answer;?></option>
+                                    <?php
                                 }
                                 ?>
                                 </select>
-                                <?php
-                                break;
-                            case 5:
-                                // Yes/No
-                                ?>
-                                <div class = "radio">
-                                    <label><input type="radio" name="question<?php echo $question->id; ?>" value="1">Yes</label>
-                                </div>
-                                <div class = "radio">
-                                    <label><input type="radio" name="question<?php echo $question->id; ?>" value="2">No</label>
-                                </div>
-                                <?php
-                                break;
-                            case 6:
-                                // True/False
-                                ?>
-                                <div class = "radio">
-                                    <label><input type="radio" name="question<?php echo $question->id; ?>" value="10">True</label>
-                                </div>
-                                <div class = "radio">
-                                    <label><input type="radio" name="question<?php echo $question->id; ?>" value="11">False</label>
-                                </div>
+                                <br>
                                 <?php
                                 break;
                             case 7:
@@ -96,7 +77,8 @@
                             case 8:
                                 // Date
                                 ?>
-                                <input type="date" class="form-control" name="question<?php echo $question->id; ?>">
+                                <input type="date" class="form-control" id="comment<?php echo $question->id; ?>" name="question<?php echo $question->id; ?>" value="<?php echo date('Y-m-d',strtotime($question->date_answer)); ?>">
+                                <br>
                                 <?php
                                 break;
                             default:
@@ -104,14 +86,16 @@
                                 echo "Sorry, something went wrong. You cannot fill out this question at this time.";
                                 break;
                         }
+                        
+                        // Add a comment field or a text answer field
                         ?>
+                        <textarea rows="3" id="comment<?php echo $question->id; ?>" name="comment<?php echo $question->id; ?>" class="form-control" maxlength="2000" placeholder='<?php echo ($question->question_type->id == 2) ? "Please type your answer here" : "If you have any comments, you can type them here.&#10;This is not required.";?> (max. 2000 characters)' style="resize:vertical"><?php echo $question->answer_or_comment;?></textarea>
                     </div>
                 </div>
                 <?php
             }
-            echo form_submit('formSubmit', 'Submit', "class='btn btn-primary'");
-            echo form_close();
             ?>
+            <button id="formSubmit" class="btn btn-primary">Submit</button>
         </div>
         <!-- /.col-lg-12 -->
     </div>

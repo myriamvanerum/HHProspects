@@ -42,7 +42,7 @@ class Survey_model extends CI_Model {
         $this->db->update('survey', $survey);
     }
     
-    function getStudentActiveSurvey($group_id) {
+    function getStudentActiveSurvey($group_id, $student_id) {
         $this->db->where('group_id', $group_id);
         $this->db->where('active', TRUE);
         $this->db->where('starts_on <', date('Y-m-d H:i:s'));
@@ -50,7 +50,7 @@ class Survey_model extends CI_Model {
         $query = $this->db->get('survey');
         if ($query->num_rows() > 0) {
             $survey = $query->first_row();
-            $survey->questions = $this->Question_model->getSurveyQuestions($survey->id);
+            $survey->questions = $this->Question_model->getSurveyQuestions($survey->id, $student_id);
             return $survey;
         } else {
             return null;

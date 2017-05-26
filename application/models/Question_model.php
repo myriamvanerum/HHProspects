@@ -153,7 +153,7 @@ class Question_model extends CI_Model {
         $this->db->delete('question');
     }
     
-    function getSurveyQuestions($survey_id) {
+    function getSurveyQuestions($survey_id, $student_id) {
         $this->db->where('survey_id', $survey_id);
         $query = $this->db->get('survey_question');
         $survey_questions = $query->result();
@@ -167,13 +167,37 @@ class Question_model extends CI_Model {
         
         foreach ($questions as $question) {
             $question->question_type = $this->getType($question->question_type_id);
-            $question->answer_options = $this->getQuestionAnswerOptions($question->id);
+            $question->answer_or_comment = "";
+            if ($this->studentHasAnswered($question->id, $student_id)) {
+                $student_answer = $this->getQuestionAnswerOrComment($question->id, $student_id);
+                $question->answer_or_comment = $student_answer->text_or_comment;
+                $question->date_answer = $student_answer->date_answer;
+            }
+            $question->answer_options = $this->getQuestionAnswerOptions($question->id, $student_answer->student_answer_id, $student_id);
         }
         
         return $questions;
     }
     
-    function getQuestionAnswerOptions($question_id) {
+    function getQuestionAnswerOrComment($question_id, $student_id) {
+        $this->db->where('question_id', $question_id);
+        $this->db->where('student_id', $student_id);
+        $query = $this->db->get('student_answer');
+        return $query->row();
+    }
+    
+    function studentHasAnswered($question_id, $student_id) {
+        $this->db->where('question_id', $question_id);
+        $this->db->where('student_id', $student_id);
+        $query = $this->db->get('student_answer');
+        if ($query->num_rows() >= 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    function getQuestionAnswerOptions($question_id, $student_answer_id, $student_id) {
         $this->db->where('question_id', $question_id);
         $query = $this->db->get('question_answer_option');
         $question_answer_options = $query->result();
@@ -183,12 +207,28 @@ class Question_model extends CI_Model {
         foreach($question_answer_options as $question_answer_option){
             $this->db->where('id', $question_answer_option->answer_option_id);
             $query = $this->db->get('answer_option');
+            
             $answer_option =  $query->row();
+            if ($this->studentHasAnswered($question_id, $student_id)) {
+                $answer_option->chosen = $this->isAnswerOptionChosen($answer_option->id, $student_answer_id);
+            } else {
+                $answer_option->chosen = false;
+            }
             array_push($answer_options, $answer_option);
         }
         
         return $answer_options;
-        
+    }
+    
+    function isAnswerOptionChosen($answer_option_id, $student_answer_id) {
+        $this->db->where('answer_option_id', $answer_option_id);
+        $this->db->where('student_answer_id', $student_answer_id);
+        $query = $this->db->get('student_answer_option');
+        if ($query->num_rows() > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
     
     function getQuestionsBySurvey($survey_id) {

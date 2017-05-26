@@ -78,6 +78,18 @@
 
         getSurveys();
     });
+    
+    $(document).on('click', '.edit', function () {
+        alert("This functionality is still under development. It will be available at a later date.");
+    });
+    
+    $(document).on('click', '.copy', function () {
+        alert("This functionality is still under development. It will be available at a later date.");
+    });
+    
+    $(document).on('click', '.delete', function () {
+        alert("This functionality is still under development. It will be available at a later date.");
+    });
 </script>
 <div id="page-wrapper">
     <div class="row">

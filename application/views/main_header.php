@@ -87,7 +87,6 @@ $student = $this->authex->getStudentInfo();
                         case 2:
                             // Administrator
                             echo "<li>" . anchor('Admin', '<span class="fa fa-home"></span> Home') . "</li>";
-                            echo "<li>" . anchor('Admin/groups', '<span class="fa fa-group"></span> Groups') . "</li>";
                             echo "<li>" . anchor('Admin/emails', '<span class="fa fa-envelope"></span> E-mails') . "</li>";
                             break;
                         case 3:

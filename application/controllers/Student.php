@@ -16,7 +16,7 @@ class Student extends CI_Controller {
     
     public function index() {
         $student = $this->authex->getStudentInfo();
-        $activeSurvey = $this->Survey_model->getStudentActiveSurvey($student->group_id);
+        $activeSurvey = $this->Survey_model->getStudentActiveSurvey($student->group_id, $student->id);
         
         if ($activeSurvey != null) {
             $data['title'] = "HH Prospects";
