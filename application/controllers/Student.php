@@ -30,9 +30,32 @@ class Student extends CI_Controller {
     }
     
     public function sendSurvey() {
+        $student = $this->authex->getStudentInfo();
+        $questions = $this->input->post('questions');
+                
+        foreach ($questions as $questionArray) {
+            $question = new stdClass();
+            $question->id = (int)$questionArray['id'];
+            $question->answer_or_comment = $questionArray['answer_or_comment'];
+            
+            if ($questionArray['date_answer'] != null) {
+                $question->date_answer = $questionArray['date_answer'];
+            } else
+            {
+                $question->date_answer = null;
+            }
+            
+            $question->chosen_answers = array();
+            foreach ($questionArray['chosen_answers'] as $answer) {
+                if ($answer != "0") {
+                    array_push($question->chosen_answers, (int)$answer);
+                }
+            }
+            
+            $this->Question_model->insertQuestionAnswers($question, $student->id);
+        }
         
         $this->session->set_flashdata('success', 1);
-        redirect("Student");
     }
 
     public function LoadView($viewnaam, $data) {

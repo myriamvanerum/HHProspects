@@ -205,13 +205,13 @@
     <div class="row form-group">
         <label for="description" class="col-sm-2 control-label">Description:</label>
         <div class="col-sm-10">
-            <textarea rows="3" cols="40" id="description" name="description" class="form-control" placeholder="Description" required style="resize:none"></textarea>
+            <textarea rows="3" cols="40" id="description" name="description" class="form-control" placeholder="Description" style="resize:none"></textarea>
         </div>
     </div>
     <div class="row form-group">
         <label for="comment" class="col-sm-2 control-label">Comment:</label>
         <div class="col-sm-10">
-            <textarea rows="3" cols="40" id="comment" name="comment" class="form-control" placeholder="Comment" required style="resize:none"></textarea>
+            <textarea rows="3" cols="40" id="comment" name="comment" class="form-control" placeholder="Comment" style="resize:none"></textarea>
         </div>
     </div>
     <div class="row form-group">
