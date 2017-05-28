@@ -9,13 +9,41 @@ class User_model extends CI_Model {
     function get($id) {
         $this->db->where('id', $id);
         $query = $this->db->get('user');
-        return $query->row();
+        $user = $query->row();
+        $user->user_level = $this->getUserLevel($user->level);
+        return $user;
     }
 
     function getAll() {
         $this->db->order_by('last_name', 'asc');
         $query = $this->db->get('user');
-        return $query->result();
+        $users = $query->result();
+        foreach ($users as $user) {
+            $user->user_level = $this->getUserLevel($user->level);
+        }
+        
+        return $users;
+    }
+    
+    function delete($id) {
+        $this->db->where('id', $id);
+        $this->db->delete('user');
+    }
+    
+    function isUserResponsibleAdmin($id) {
+        $this->db->where('admin_id', $id);
+        $query = $this->db->get('student');
+        if ($query->num_rows() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    function getUserLevel($id) {
+        $this->db->where('id', $id);
+        $query = $this->db->get('user_level');
+        return $query->row();
     }
     
     function getAllByLevel($level) {
@@ -73,7 +101,6 @@ class User_model extends CI_Model {
         
         $this->db->where('email', $user->email);
         $this->db->update('user', $user);
-        //return $this->db->update_id();
     }
     
     function logFailedLoginAttempt($login_attempt) {

@@ -13,6 +13,7 @@ class Student_model extends CI_Model {
         return $query->row();
     }
     
+    // get a student. Also get corresponding admin and group.
     function getWithAdmin($id) {
         $this->db->where('id', $id);
         $query = $this->db->get('student');        
@@ -36,6 +37,7 @@ class Student_model extends CI_Model {
         return $query->result();
     }
     
+    // get all students. Also get corresponding admin and group.
     function getAllWithAdmin() {
         $this->db->order_by('last_name', 'asc');
         $query = $this->db->get('student');
@@ -87,11 +89,13 @@ class Student_model extends CI_Model {
         $this->db->update('student', $student);
     }
     
+    // delete old failed login attempts after 30 minutes
     function deleteOldLoginAttempts($time) {
         $this->db->where('timestamp <', $time);
         $this->db->delete('student_login_attempt');
     }
     
+    // delete a students failed login attempts when he is assigned a new password
     function deleteLoginAttemptsOneStudent($id) {
         $this->db->where('student_id', $id);
         $this->db->delete('student_login_attempt');
@@ -103,10 +107,12 @@ class Student_model extends CI_Model {
         return $this->db->count_all_results();
     }
     
+    // log a failed login attempt for a student
     function logFailedLoginAttempt($login_attempt) {
         $this->db->insert('student_login_attempt', $login_attempt);
     }
     
+    // log when password is reset for a student. this also triggers deleteLoginAttemptsOneStudent()
     function logPasswordReset($login_attempt) {
         $this->db->insert('student_failed_login_log', $login_attempt);
     }

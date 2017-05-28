@@ -1,3 +1,4 @@
+<!--Student page if there is no survey at this time-->
 <div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">

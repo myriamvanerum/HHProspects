@@ -29,6 +29,7 @@ class Question_model extends CI_Model {
         return $questions;
     }
 
+    // get all active questions
     function getAllActive($searchString, $ids) {
         $this->db->where('active', TRUE);
         $this->db->like('text', $searchString);
@@ -44,6 +45,7 @@ class Question_model extends CI_Model {
         return $questions;
     }
 
+    // get questions by id, from an array of ids
     function getByIdArray($ids) {
         $this->db->where_in('id', $ids);
         $query = $this->db->get('question');
@@ -67,6 +69,7 @@ class Question_model extends CI_Model {
         return $query->row();
     }
 
+    // get the answer_options for a question
     function getAnswerOptions($question_id) {
         $this->db->where('question_id', $question_id);
         $query = $this->db->get('question_answer_option');
@@ -180,6 +183,7 @@ class Question_model extends CI_Model {
         return $questions;
     }
 
+    // get the text response to a question
     function getQuestionAnswerOrComment($question_id, $student_id) {
         $this->db->where('question_id', $question_id);
         $this->db->where('student_id', $student_id);
@@ -287,8 +291,6 @@ class Question_model extends CI_Model {
             $student_answer->date_answer = $question->date_answer;
         }
         
-        echo json_encode($question, JSON_PRETTY_PRINT);
-        
         if ($this->studentHasAnswered($question->id, $student_id)) {
             // student has already answered this question, so update
             $student_answer_id = $this->updateStudentAnswer($student_answer);
@@ -296,7 +298,6 @@ class Question_model extends CI_Model {
             // student hasn't answered this question yet, so insert
             $student_answer_id = $this->insertStudentAnswer($student_answer);
         }
-        
         
         // get answers
         $current_answers = $question->chosen_answers;

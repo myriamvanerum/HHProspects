@@ -35,13 +35,18 @@ class Survey_model extends CI_Model {
     function insert($survey) {
         $this->db->insert('survey', $survey);
         return $this->db->insert_id();
+        
+        // When the survey starts, an email should be sent to all students
+        // Cronjob?
     }
     
     function toggleActive($survey) {
+        // change whether the survey is active or inactive
         $this->db->where('id', $survey->id);
         $this->db->update('survey', $survey);
     }
     
+    //get the active survey for a student who logs in, if there is one
     function getStudentActiveSurvey($group_id, $student_id) {
         $this->db->where('group_id', $group_id);
         $this->db->where('active', TRUE);

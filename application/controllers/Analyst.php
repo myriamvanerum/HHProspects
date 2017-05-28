@@ -15,11 +15,6 @@ class Analyst extends CI_Controller {
         $this->load->model('Group_model');
     }
     
-    public function index() {
-        $data['title'] = "HH Prospects";
-        $this->LoadView('analyst/surveys', $data);
-    }
-
     public function LoadView($viewnaam, $data) {
 
         $partials = array(
@@ -30,6 +25,12 @@ class Analyst extends CI_Controller {
         );
         
         $this->parser->parse('main_master', $partials);
+    }
+    
+    // Surveys page
+    public function index() {
+        $data['title'] = "HH Prospects";
+        $this->LoadView('analyst/surveys', $data);
     }
     
     public function getSurveys() {
@@ -96,6 +97,10 @@ class Analyst extends CI_Controller {
         redirect('Analyst');
     }
     
+    
+    
+    
+    // questions page
     public function questions() {
         $data['title'] = "HH Prospects";
         $this->LoadView('analyst/questions', $data);
@@ -145,8 +150,16 @@ class Analyst extends CI_Controller {
         $this->Question_model->toggleActive($question);
     }
     
+    
+    // analysis page
     public function analysis() {
         $data['title'] = "HH Prospects";
         $this->LoadView('analyst/analysis', $data);
+    }
+    
+    public function getQuestionsAnalysis() {
+        $questions = $this->Question_model->getAll();
+        
+        echo json_encode($questions);
     }
 }

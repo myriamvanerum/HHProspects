@@ -19,14 +19,11 @@
         <!-- Bootstrap Social CSS -->
         <link href="<?php echo base_url(); ?>application/css/bootstrap-social.css" rel="stylesheet">
 
-        <!-- MetisMenu CSS -->
-        <!--<link href="<?php echo base_url(); ?>application/css/metisMenu.min.css" rel="stylesheet">-->
-
         <!-- SBAdmin2 CSS -->
         <link href="<?php echo base_url(); ?>application/css/sb-admin-2.css" rel="stylesheet">
 
         <!-- Morris Charts CSS -->
-        <!--<link href="<?php echo base_url(); ?>application/css/morris.css" rel="stylesheet">-->
+        <link href="<?php echo base_url(); ?>application/css/morris.css" rel="stylesheet">
         
         <!-- Custom CSS -->
         <link href="<?php echo base_url(); ?>application/css/custom.css" rel="stylesheet">
@@ -46,14 +43,10 @@
 
         <!-- Bootstrap Core JavaScript -->
         <script src="<?php echo base_url(); ?>application/js/bootstrap.min.js"></script>
-
-        <!-- Metis Menu Plugin JavaScript -->
-        <!--<script src="<?php echo base_url(); ?>application/js/metisMenu.min.js"></script>-->
-
+        
         <!-- Morris Charts JavaScript -->
-<!--        <script src="<?php echo base_url(); ?>application/js/raphael.min.js"></script>
+        <script src="<?php echo base_url(); ?>application/js/raphael.min.js"></script>
         <script src="<?php echo base_url(); ?>application/js/morris.min.js"></script>
-        <script src="<?php echo base_url(); ?>application/js/morris-data.js"></script>-->
 
         <!-- Custom Theme JavaScript -->
         <!--<script src="<?php echo base_url(); ?>application/js/sb-admin-2.js"></script>-->

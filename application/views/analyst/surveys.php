@@ -1,3 +1,4 @@
+<!--Analyst page to manage surveys-->
 <?php $user = $this->authex->getUserInfo(); ?>
 <script type="text/javascript">
     $(document).ready(function () {

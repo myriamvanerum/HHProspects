@@ -1,3 +1,4 @@
+<!--Student page-->
 <?php $survey = current($surveys); ?>
 <?php $student = $this->authex->getStudentInfo(); ?>
 <script type="text/javascript">
@@ -7,6 +8,7 @@
         var chosen_answers = new Array();
         chosen_answers = [0];
 
+        // loop through all the questions in this survey
         $(".panel-body").each(function (index) {
             var question = new Object();
             question.id = $(this).attr('id');
@@ -18,6 +20,7 @@
                 question.date_answer = null;
             }
 
+            // loop through all the possible answer_options for this question, and see if they are selected or not 
             $(this).find(".answer" + question.id).each(function (index) {
                 if ($(this).is(":checked") || $(this).is(":selected"))
                 {
@@ -31,6 +34,7 @@
             questions.push(question);
         });
 
+        // save the results to the database
         $.ajax({
             type: "POST",
             url: site_url + '/Student/sendSurvey',

@@ -1,4 +1,5 @@
 <?php
+// table used by Admin to display students
 $studentTable = array('table_open' => '<table class="table table-striped">');
 $this->table->set_template($studentTable);
 

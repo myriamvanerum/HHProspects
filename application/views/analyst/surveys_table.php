@@ -1,4 +1,5 @@
 <?php
+// table for all surveys
 $surveyTable = array('table_open' => '<table class="table table-striped">');
 $this->table->set_template($surveyTable);
 

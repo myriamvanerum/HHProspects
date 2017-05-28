@@ -40,8 +40,7 @@ class Student extends CI_Controller {
             
             if ($questionArray['date_answer'] != null) {
                 $question->date_answer = $questionArray['date_answer'];
-            } else
-            {
+            } else {
                 $question->date_answer = null;
             }
             

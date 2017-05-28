@@ -15,6 +15,7 @@ class User_control {
         $CI->load->library('authex');
     }
 
+    // Check if user is not logged in. Redirect otherwise.
     public function notLoggedIn() {
         $CI = & get_instance();
         $user = $CI->authex->getUserInfo();
@@ -41,6 +42,7 @@ class User_control {
         }
     }
     
+    // Check if admin is logged in. Redirect otherwise.
     public function adminLoggedIn() {
         $CI = & get_instance();
         $user = $CI->authex->getUserInfo();
@@ -65,6 +67,7 @@ class User_control {
         }
     }
     
+    // Check if analyst is logged in. Redirect otherwise.
     public function analystLoggedIn() {
         $CI = & get_instance();
         $user = $CI->authex->getUserInfo();
@@ -89,6 +92,7 @@ class User_control {
         }
     }
     
+    // Check if SYSOP is logged in. Redirect otherwise.
     public function sysopLoggedIn() {
         $CI = & get_instance();
         $user = $CI->authex->getUserInfo();
@@ -113,6 +117,7 @@ class User_control {
         }
     }
     
+    // Check if student is logged in. Redirect otherwise.
     public function studentLoggedIn() {
         $CI = & get_instance();
         $user = $CI->authex->getUserInfo();

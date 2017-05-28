@@ -1,3 +1,4 @@
+<!--Analyst page to manage questions-->
 <?php $user = $this->authex->getUserInfo(); ?>
 <script type="text/javascript">
     $(document).ready(function () {
@@ -148,7 +149,7 @@
     function fillDeleteModal() {
         if (questionUsed === true)
         {
-            // Question caanot be deleted
+            // Question cannot be deleted
             $("#modalDeleteLabel").html("Can\'t delete this question");
             $("#deleteText").html("The question <strong>\"" + question.text + "\"</strong> cannot be deleted because a survey still uses this question.");
             $("#deleteOK").hide();

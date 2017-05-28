@@ -1,3 +1,4 @@
+<!--Admin page to manage and send email templates-->
 <?php $user = $this->authex->getUserInfo(); ?>
 <script type="text/javascript">
     // Get a single template for modal

@@ -1,3 +1,4 @@
+<!--Analyst page to add a new survey-->
 <script type="text/javascript">
     // Get all groups
     function getGroups() {
@@ -66,6 +67,7 @@
 
     }
 
+    // Search for a specific question
     $(function () {
         $('#searchQuestion').keyup(function () {
             getAddQuestions($(this).val());

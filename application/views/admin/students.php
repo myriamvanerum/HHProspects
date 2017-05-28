@@ -1,3 +1,4 @@
+<!--Admin page to manage students-->
 <?php $user = $this->authex->getUserInfo(); ?>
 <script type="text/javascript">
     // Get a single student for modal

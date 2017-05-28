@@ -1,4 +1,5 @@
 <?php
+// Table to show all email templates
 $emailTable = array('table_open' => '<table class="table table-striped">');
 $this->table->set_template($emailTable);
 

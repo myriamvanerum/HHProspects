@@ -16,6 +16,25 @@ class Sysop extends CI_Controller {
         $data['title'] = "HH Prospects";
         $this->LoadView('sysop/sysop', $data);
     }
+    
+    public function getUsers() {
+        $data['users'] = $this->User_model->getAll();
+        $this->load->view('sysop/users_table', $data);
+    }
+    
+    public function getUser($id) {
+        $user = $this->User_model->get($id);
+        echo json_encode($user);
+    }
+    
+    public function isUserResponsibleAdmin($id) {
+        $userResponsible = $this->User_model->isUserResponsibleAdmin($id);
+        echo json_encode($userResponsible);
+    }
+    
+    public function deleteUser($id) {
+        $this->User_model->delete($id);
+    }
 
     public function LoadView($viewnaam, $data) {
 
