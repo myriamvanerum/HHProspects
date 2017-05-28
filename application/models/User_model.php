@@ -25,6 +25,11 @@ class User_model extends CI_Model {
         return $users;
     }
     
+    function insert($user) {
+        $this->db->insert('user', $user);
+        return $this->db->insert_id();
+    }
+    
     function delete($id) {
         $this->db->where('id', $id);
         $this->db->delete('user');
@@ -44,6 +49,11 @@ class User_model extends CI_Model {
         $this->db->where('id', $id);
         $query = $this->db->get('user_level');
         return $query->row();
+    }
+    
+    function getAllUserLevels() {
+        $query = $this->db->get('user_level');
+        return $query->result();
     }
     
     function getAllByLevel($level) {
