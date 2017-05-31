@@ -5,12 +5,18 @@ class Survey_model extends CI_Model {
     function __construct() {
         parent::__construct();
         $this->load->model('Group_model');
+        $this->load->model('Question_model');
     }
 
     function get($id) {
         $this->db->where('id', $id);
         $query = $this->db->get('survey');
-        return $query->row();
+        $survey = $query->row();
+        
+        $survey->group = $this->Group_model->get($survey->group_id);
+        $survey->questions = $this->Question_model->getQuestionsBySurvey($survey->id);
+        
+        return $survey;
     }
 
     function getAll() {
@@ -20,6 +26,7 @@ class Survey_model extends CI_Model {
         
         foreach($surveys as $survey){
             $survey->group = $this->Group_model->get($survey->group_id);
+            $survey->question_count = $this->Question_model->getSurveyQuestionCount($survey->id);
         }
 
         return $surveys;
@@ -27,5 +34,31 @@ class Survey_model extends CI_Model {
     
     function insert($survey) {
         $this->db->insert('survey', $survey);
+        return $this->db->insert_id();
+        
+        // When the survey starts, an email should be sent to all students
+        // Cronjob?
+    }
+    
+    function toggleActive($survey) {
+        // change whether the survey is active or inactive
+        $this->db->where('id', $survey->id);
+        $this->db->update('survey', $survey);
+    }
+    
+    //get the active survey for a student who logs in, if there is one
+    function getStudentActiveSurvey($group_id, $student_id) {
+        $this->db->where('group_id', $group_id);
+        $this->db->where('active', TRUE);
+        $this->db->where('starts_on <', date('Y-m-d H:i:s'));
+        $this->db->where('ends_on >', date('Y-m-d H:i:s'));
+        $query = $this->db->get('survey');
+        if ($query->num_rows() > 0) {
+            $survey = $query->first_row();
+            $survey->questions = $this->Question_model->getSurveyQuestions($survey->id, $student_id);
+            return $survey;
+        } else {
+            return null;
+        }
     }
 }

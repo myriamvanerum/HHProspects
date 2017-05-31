@@ -13,6 +13,7 @@ class Student_model extends CI_Model {
         return $query->row();
     }
     
+    // get a student. Also get corresponding admin and group.
     function getWithAdmin($id) {
         $this->db->where('id', $id);
         $query = $this->db->get('student');        
@@ -32,10 +33,12 @@ class Student_model extends CI_Model {
     
     function getFromGroup($group_id) {
         $this->db->where('group_id', $group_id);
+        $this->db->where('active', TRUE);
         $query = $this->db->get('student');
         return $query->result();
     }
     
+    // get all students. Also get corresponding admin and group.
     function getAllWithAdmin() {
         $this->db->order_by('last_name', 'asc');
         $query = $this->db->get('student');
@@ -52,6 +55,7 @@ class Student_model extends CI_Model {
 
     function getStudentByEmail($email) {
         $this->db->where('email', $email);
+        $this->db->where('active', TRUE);
         $query = $this->db->get('student');
         if ($query->num_rows() == 1) {
             return $query->row();
@@ -87,11 +91,13 @@ class Student_model extends CI_Model {
         $this->db->update('student', $student);
     }
     
+    // delete old failed login attempts after 30 minutes
     function deleteOldLoginAttempts($time) {
         $this->db->where('timestamp <', $time);
         $this->db->delete('student_login_attempt');
     }
     
+    // delete a students failed login attempts when he is assigned a new password
     function deleteLoginAttemptsOneStudent($id) {
         $this->db->where('student_id', $id);
         $this->db->delete('student_login_attempt');
@@ -103,15 +109,43 @@ class Student_model extends CI_Model {
         return $this->db->count_all_results();
     }
     
+    // log a failed login attempt for a student
     function logFailedLoginAttempt($login_attempt) {
         $this->db->insert('student_login_attempt', $login_attempt);
     }
     
+    // log when password is reset for a student. this also triggers deleteLoginAttemptsOneStudent()
     function logPasswordReset($login_attempt) {
         $this->db->insert('student_failed_login_log', $login_attempt);
     }
     
     function insert($student) {
         $this->db->insert('student', $student);
+    }
+    
+    function update($student) {
+        $this->db->where('id', $student->id);
+        $this->db->update('student', $student);
+    }
+    
+    function hasStudentAnswered($id) {
+        $this->db->where('student_id', $id);
+        $query = $this->db->get('student_answer');
+        if ($query->num_rows() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    function delete($id) {
+        $this->db->where('id', $id);
+        $this->db->delete('student');
+    }
+    
+    function toggleActive($student) {
+        // change whether the student is active or inactive
+        $this->db->where('id', $student->id);
+        $this->db->update('student', $student);
     }
 }

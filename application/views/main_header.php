@@ -82,19 +82,19 @@ $student = $this->authex->getStudentInfo();
                     switch ($user->level) {
                         case 1:
                             // Sysop
-                            echo "<li>" . anchor('Sysop', '<span class="fa fa-home"></span> Home') . "</li>";
+                            echo "<li>" . anchor('Sysop', '<span class="fa fa-users"></span> Users') . "</li>";
                             break;
                         case 2:
                             // Administrator
-                            echo "<li>" . anchor('Admin', '<span class="fa fa-home"></span> Home') . "</li>";
-                            echo "<li>" . anchor('Admin/groups', '<span class="fa fa-group"></span> Groups') . "</li>";
+                            echo "<li>" . anchor('Admin', '<span class="fa fa-users"></span> Students') . "</li>";
+                            echo "<li>" . anchor('Admin/groups', '<span class="fa fa-users"></span> Groups') . "</li>";
                             echo "<li>" . anchor('Admin/emails', '<span class="fa fa-envelope"></span> E-mails') . "</li>";
                             break;
                         case 3:
                             // Analyst
                             echo "<li>" . anchor('Analyst', '<span class="fa fa-bullhorn"></span> Surveys') . "</li>";
                             echo "<li>" . anchor('Analyst/questions', '<span class="fa fa-question-circle"></span> Questions') . "</li>";
-                            echo "<li>" . anchor('Analyst/analysis', '<span class="fa fa-binoculars"></span> Analysis') . "</li>";
+                            echo "<li>" . anchor('Analyst/analytics', '<span class="fa fa-binoculars"></span> Analytics') . "</li>";
                             break;
                         }
                 } elseif ($student != null) {
@@ -103,22 +103,6 @@ $student = $this->authex->getStudentInfo();
                     echo "<li>" . anchor('Home', '<span class="fa fa-home"></span> Home') . "</li>";
                 }
                 ?>
-                <li><?php echo anchor('Login_sysop', 'SYSOP Login'); ?></li>
-                <li><?php echo anchor('Login_student', 'Student Login'); ?></li>
-                <!--                <li>
-                                    <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Charts<span class="fa arrow"></span></a>
-                                    <ul class="nav nav-second-level">
-                                        <li>
-                                            <a href="flot.html">Flot Charts</a>
-                                        </li>
-                                        <li>
-                                            <a href="morris.html">Morris.js Charts</a>
-                                        </li>
-                                    </ul>
-                                     /.nav-second-level 
-                                </li>
-                                <li><a href="tables.html"><i class="fa fa-table fa-fw"></i> Tables</a></li>
-                                <li><a href="forms.html"><i class="fa fa-edit fa-fw"></i> Forms</a></li>-->
             </ul>
         </div>
         <!-- /.sidebar-collapse -->

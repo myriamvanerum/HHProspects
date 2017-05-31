@@ -21,6 +21,12 @@ class Admin extends CI_Controller {
         $this->LoadView('admin/students', $data);
     }
     
+    public function groups() {
+        $data['title'] = "Groups - HH Prospects";
+        
+        $this->LoadView('admin/groups', $data);
+    }
+    
     public function emails() {
         $data['title'] = "Emails - HH Prospects";
         
@@ -77,19 +83,80 @@ class Admin extends CI_Controller {
                     'key' => $this->config->encryption_key
                 )
         );
-        $student->password = $this->encryption->encrypt($this->authex->randomPassword());
+        $unencryptedPassword = $this->authex->randomPassword();
+        $student->password = $this->encryption->encrypt($unencryptedPassword);
         
         $this->Student_model->insert($student);
+        
+        $this->email->from('noreply@hh.se', 'Halmstad University Prospects');
+        $this->email->to($student->email);
+        $this->email->subject('HH Prospects New Account');
+        $this->email->message("Hi " . $student->first_name . " " . $student->last_name . "\nA new account was made for you on the Halmstad University Prospects webapp.\nHere is your new password: " . $unencryptedPassword);
+        $this->email->send();
+    }
+    
+    public function updateStudent($id) {
+        $student = new stdClass();
+        $student->id = $id;
+        $student->first_name = $this->input->post('first_name');
+        $student->last_name = $this->input->post('last_name');
+        $student->email = trim($this->input->post('email'));
+        $student->country = $this->input->post('country');
+        $student->admin_id = $this->input->post('admin_id');
+        $student->group_id = $this->input->post('group_id');
+        $student->zip_code = $this->input->post('zip_code');
+        $student->language = $this->input->post('language');
+        $student->instruction_language = $this->input->post('instruction_language');
+        
+        $this->Student_model->update($student);
+    }
+    
+    public function deleteStudent($id) {
+        $this->Student_model->delete($id);
+    }
+    
+    public function hasStudentAnswered($id) {
+        $studentAnswered = $this->Student_model->hasStudentAnswered($id);
+        echo json_encode($studentAnswered);
+    }
+    
+    public function toggleStudentActive($id) {
+        $student = new stdClass();
+        $student->id = $id;
+        $student->active = $this->input->post('active');
+        $student->active = !$student->active;
+        $this->Student_model->toggleActive($student);
     }
     
     public function uploadFile() {
         echo "not functional";
     }
     
+    public function getGroups() {
+        $data['groups'] = $this->Group_model->getAll();
+        $this->load->view('admin/groups_table', $data);
+    }
+    
+    public function getGroup($id) {
+        $group = $this->Group_model->get($id);
+        echo json_encode($group);
+    }
+    
     public function insertGroup() {
         $group = new stdClass();
         $group->name = trim($this->input->post('name'));
         $this->Group_model->insert($group);
+    }
+    
+    public function updateGroup($id) {
+        $group = new stdClass();
+        $group->id = $id;
+        $group->name = trim($this->input->post('name'));
+        $this->Group_model->update($group);
+    }
+    
+    public function deleteGroup($id) {
+        $this->Group_model->delete($id);
     }
     
     public function getEmailTemplates() {
@@ -127,5 +194,18 @@ class Admin extends CI_Controller {
         $this->email->message(preg_replace("/\r\n|\r|\n/",'<br/>', $email->content));
         $this->email->set_mailtype("html");
         $this->email->send();
+    }
+    
+    public function updateEmailTemplate($id) {
+        $email = new stdClass();
+        $email->id = $id;
+        $email->name = trim($this->input->post('name'));
+        $email->subject = $this->input->post('subject');
+        $email->content = $this->input->post('content');
+        $this->Email_model->update($email);
+    }
+    
+    public function deleteEmailTemplate($id) {
+        $this->Email_model->delete($id);
     }
 }

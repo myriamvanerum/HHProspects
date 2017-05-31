@@ -5,7 +5,7 @@
 
 #content {
     margin-top: 30px;
-    padding-bottom: 30px;
+    padding-bottom: 60px;
 }
 
 .extraPaddingTop {
@@ -21,4 +21,8 @@ html {
   position: absolute;
   bottom: 0;
   width: 100%;
+}
+
+.hyperlinkNoLayout {
+    color: red;
 }
