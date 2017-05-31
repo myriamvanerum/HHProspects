@@ -82,18 +82,19 @@ $student = $this->authex->getStudentInfo();
                     switch ($user->level) {
                         case 1:
                             // Sysop
-                            echo "<li>" . anchor('Sysop', '<span class="fa fa-home"></span> Home') . "</li>";
+                            echo "<li>" . anchor('Sysop', '<span class="fa fa-users"></span> Users') . "</li>";
                             break;
                         case 2:
                             // Administrator
-                            echo "<li>" . anchor('Admin', '<span class="fa fa-home"></span> Home') . "</li>";
+                            echo "<li>" . anchor('Admin', '<span class="fa fa-users"></span> Students') . "</li>";
+                            echo "<li>" . anchor('Admin/groups', '<span class="fa fa-users"></span> Groups') . "</li>";
                             echo "<li>" . anchor('Admin/emails', '<span class="fa fa-envelope"></span> E-mails') . "</li>";
                             break;
                         case 3:
                             // Analyst
                             echo "<li>" . anchor('Analyst', '<span class="fa fa-bullhorn"></span> Surveys') . "</li>";
                             echo "<li>" . anchor('Analyst/questions', '<span class="fa fa-question-circle"></span> Questions') . "</li>";
-                            echo "<li>" . anchor('Analyst/analysis', '<span class="fa fa-binoculars"></span> Analysis') . "</li>";
+                            echo "<li>" . anchor('Analyst/analytics', '<span class="fa fa-binoculars"></span> Analytics') . "</li>";
                             break;
                         }
                 } elseif ($student != null) {

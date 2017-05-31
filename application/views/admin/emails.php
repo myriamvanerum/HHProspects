@@ -62,6 +62,7 @@
 
     function fillInsertModal() {
         $("#insert_name").val('');
+        $("#insert_subject").val('');
         $("#insert_mail_content").val('');
     }
 
@@ -106,7 +107,7 @@
             option.value = group.id;
             combobox.appendChild(option);
         });
-        
+
         $("#emailSend").attr('value', email.id);
     }
 
@@ -124,19 +125,71 @@
         });
         $('#modalSend').modal('toggle');
     });
-    
+
+    // Edit email template
     $(document).on('click', '.edit', function () {
-        alert("This functionality is still under development. It will be available at a later date.");
+        getEmailTemplate($(this).attr('value'));
+        fillEditModal();
+        $('#modalEdit').modal('show');
     });
-    
+
+    function fillEditModal() {
+        $("#edit_name").val(email.name);
+        $("#edit_subject").val(email.subject);
+        $("#edit_mail_content").val(email.content);
+
+        $("#editSave").attr('value', email.id);
+    }
+
+    $(document).on('click', '#editSave', function () {
+        $.ajax({
+            type: "POST",
+            url: site_url + '/Admin/updateEmailTemplate/' + $(this).prop('value'),
+            data: {
+                name: $("#edit_name").val(),
+                subject: $("#edit_subject").val(),
+                content: $("#edit_mail_content").val()
+            },
+            async: false,
+            success: function (data) {
+                console.log("success:", data);
+            }
+        });
+        $('#modalEdit').modal('toggle');
+
+        getEmailTemplates();
+    });
+
+    // Delete email_template
     $(document).on('click', '.delete', function () {
-        alert("This functionality is still under development. It will be available at a later date.");
+        getEmailTemplate($(this).attr('value'));
+        fillDeleteModal();
+        $('#modalDelete').modal('show');
+    });
+
+    function fillDeleteModal() {
+        $("#deleteText").html("Are you sure you want to remove <strong>\"" + email.name + "\"</strong>?");
+        $("#deleteSave").attr('value', email.id);
+    }
+
+    $(document).on('click', '#deleteSave', function () {
+        $.ajax({
+            type: "POST",
+            url: site_url + '/Admin/deleteEmailTemplate/' + $(this).prop('value'),
+            data: {},
+            async: false,
+            success: function (data) {
+                console.log("success:", data);
+            }
+        });
+
+        getEmailTemplates();
     });
 </script>
 <div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header">Administrator homepage</h1>
+            <h1 class="page-header">Administrator page</h1>
             <h3 class='col-sm-6'>E-mail templates</h3>
             <h3 class="text-right col-sm-6">
                 <button class="btn btn-primary" id="insert"><span class="fa fa-plus"></span> Add a template</button>
@@ -261,6 +314,62 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 <button type="submit" class="btn btn-primary"  id="emailSend">Send</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit email_template modal-->
+<div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="modalEditLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="modalEditLabel">Edit e-mail template</h4> 
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="row form-group">
+                        <label for="edit_name" class="col-sm-3 control-label">Template name:</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="edit_name" placeholder="Template name" required>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label for="edit_subject" class="col-sm-3 control-label">Subject:</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="edit_subject" placeholder="Subject" required>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-sm-12">
+                            <textarea rows="20" cols="40" id="edit_mail_content" class="form-control" placeholder="Content" style="resize:vertical"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-primary"  id="editSave">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete email template modal-->
+<div class="modal fade" id="modalDelete" tabindex="-1" role="dialog" aria-labelledby="modalDeleteLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="modalDeleteLabel">Delete e-mail template</h4> 
+            </div>
+            <div class="modal-body">
+                <p id="deleteText"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-danger" data-dismiss="modal" id="deleteSave" value="">Delete</button>
             </div>
         </div>
     </div>

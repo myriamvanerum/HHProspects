@@ -30,6 +30,11 @@ class User_model extends CI_Model {
         return $this->db->insert_id();
     }
     
+    function update($user) {
+        $this->db->where('id', $user->id);
+        $this->db->update('user', $user);
+    }
+    
     function delete($id) {
         $this->db->where('id', $id);
         $this->db->delete('user');

@@ -152,7 +152,7 @@ class Analyst extends CI_Controller {
     
     
     // analysis page
-    public function analysis() {
+    public function analytics() {
         $data['title'] = "HH Prospects";
         $this->LoadView('analyst/analysis', $data);
     }

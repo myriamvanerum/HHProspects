@@ -21,4 +21,14 @@ class Group_model extends CI_Model {
     function insert($group) {
         $this->db->insert('group', $group);
     }
+    
+    function update($group) {
+        $this->db->where('id', $group->id);
+        $this->db->update('group', $group);
+    }
+    
+    function delete($id) {
+        $this->db->where('id', $id);
+        $this->db->delete('group');
+    }
 }

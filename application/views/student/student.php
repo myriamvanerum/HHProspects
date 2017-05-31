@@ -128,10 +128,6 @@
                                 <?php
                                 break;
                             case 7:
-                                // Slider
-                                echo "Sorry, something went wrong. You cannot fill out this question at this time.";
-                                break;
-                            case 8:
                                 // Date
                                 ?>
                                 <input type="date" class="form-control" id="date_answer<?php echo $question->id; ?>" name="question<?php echo $question->id; ?>" value="<?php echo ($question->date_answer != null) ? date('Y-m-d', strtotime($question->date_answer)) : "";?>">

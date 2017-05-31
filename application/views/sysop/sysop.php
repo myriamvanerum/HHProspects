@@ -93,8 +93,49 @@
 
     });
 
+    // Edit user
     $(document).on('click', '.edit', function () {
-        alert("This functionality is still under development. It will be available at a later date.");
+        getUser($(this).attr('value'));
+        getUserLevels();
+        fillEditModal();
+        $('#modalEdit').modal('show');
+    });
+
+    function fillEditModal() {
+        $("#edit_first_name").val(user.first_name);
+        $("#edit_last_name").val(user.last_name);
+        $("#edit_email").val(user.email);
+        $("#edit_user_level").empty();
+        combobox = document.getElementById("edit_user_level");
+        userLevels.forEach(function (userLevel) {
+            option = document.createElement("option");
+            option.text = userLevel.name;
+            option.value = userLevel.id;
+            combobox.appendChild(option);
+        });
+        $("#edit_user_level").val(user.level);
+
+        $("#editSave").attr('value', user.id);
+    }
+
+    $(document).on('click', '#editSave', function () {
+        $.ajax({
+            type: "POST",
+            url: site_url + '/Sysop/updateUser/' + $(this).prop('value'),
+            data: {
+                first_name: $("#edit_first_name").val(),
+                last_name: $("#edit_last_name").val(),
+                email: $("#edit_email").val(),
+                level: $("#edit_user_level").val()
+            },
+            async: false,
+            success: function (data) {
+                console.log("success:", data);
+            }
+        });
+        $('#modalEdit').modal('toggle');
+
+        getUsers();
     });
     
     // Delete user
@@ -140,7 +181,7 @@
 <div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header">SYSOP Homepage</h1>
+            <h1 class="page-header">SYSOP page</h1>
              <h3 class='col-sm-4'>User list</h3>
             <h3 class="text-right col-sm-8">
                 <button class="btn btn-primary" id="insert"><span class="fa fa-user-plus"></span> Add a user</button>
@@ -193,6 +234,51 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 <button type="submit" class="btn btn-primary"  id="insertSave">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- edit user modal-->
+<div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="modalEditLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="modalEditLabel">Edit user</h4> 
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="row form-group">
+                        <label for="edit_first_name" class="col-sm-2 control-label">First name:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="edit_first_name" placeholder="First name" required>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label for="edit_last_name" class="col-sm-2 control-label">Last name:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="edit_last_name" placeholder="Last name" required>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label for="edit_email" class="col-sm-2 control-label">E-mail:</label>
+                        <div class="col-sm-10">
+                            <input type="email" class="form-control" id="edit_email" placeholder="E-mail" required>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label for="edit_admin" class="col-sm-2 control-label">User level:</label>
+                        <div class="col-sm-10">
+                            <select name="insert_user_level" id="edit_user_level" class="form-control">
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-primary"  id="editSave">Submit</button>
             </div>
         </div>
     </div>

@@ -33,6 +33,7 @@ class Student_model extends CI_Model {
     
     function getFromGroup($group_id) {
         $this->db->where('group_id', $group_id);
+        $this->db->where('active', TRUE);
         $query = $this->db->get('student');
         return $query->result();
     }
@@ -54,6 +55,7 @@ class Student_model extends CI_Model {
 
     function getStudentByEmail($email) {
         $this->db->where('email', $email);
+        $this->db->where('active', TRUE);
         $query = $this->db->get('student');
         if ($query->num_rows() == 1) {
             return $query->row();
@@ -119,5 +121,31 @@ class Student_model extends CI_Model {
     
     function insert($student) {
         $this->db->insert('student', $student);
+    }
+    
+    function update($student) {
+        $this->db->where('id', $student->id);
+        $this->db->update('student', $student);
+    }
+    
+    function hasStudentAnswered($id) {
+        $this->db->where('student_id', $id);
+        $query = $this->db->get('student_answer');
+        if ($query->num_rows() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    function delete($id) {
+        $this->db->where('id', $id);
+        $this->db->delete('student');
+    }
+    
+    function toggleActive($student) {
+        // change whether the student is active or inactive
+        $this->db->where('id', $student->id);
+        $this->db->update('student', $student);
     }
 }

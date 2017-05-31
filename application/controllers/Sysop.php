@@ -66,6 +66,16 @@ class Sysop extends CI_Controller {
         $this->email->message("Hello " . $user->first_name . " " . $user->last_name . "\nA new account was made for you on the Halmstad University Prospects webapp.\nHere is your new password: " . $unencryptedPassword);
         $this->email->send();
     }
+    
+    public function updateUser($id) {
+        $user = new stdClass();
+        $user->id = $id;
+        $user->first_name = $this->input->post('first_name');
+        $user->last_name = $this->input->post('last_name');
+        $user->email = trim($this->input->post('email'));
+        $user->level = $this->input->post('level');
+        $this->User_model->update($user);
+    }
 
     public function LoadView($viewnaam, $data) {
 

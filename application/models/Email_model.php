@@ -23,4 +23,14 @@ class Email_model extends CI_Model {
     function insert($email) {
         $this->db->insert('email_template', $email);
     }
+    
+    function update($email) {
+        $this->db->where('id', $email->id);
+        $this->db->update('email_template', $email);
+    }
+    
+    function delete($id) {
+        $this->db->where('id', $id);
+        $this->db->delete('email_template');
+    }
 }
